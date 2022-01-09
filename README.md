@@ -21,5 +21,4 @@ Commands:
 
 Requirements:
  migrate                       Migration tool: https://github.com/golang-migrate/migrate
-
 ```
