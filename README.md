@@ -22,3 +22,6 @@ Commands:
 Requirements:
  migrate                       Migration tool: https://github.com/golang-migrate/migrate
 ```
+## License
+
+This project is licensed under the [MIT License](https://github.com/pvarentsov/go-backend-template/blob/main/LICENSE).
