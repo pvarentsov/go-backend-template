@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:14-alpine
+    container_name: go-backend-template-postgres
+    ports:
+      - '5454:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=go-backend-template
+      - POSTGRES_USER=go-backend-template
+      - POSTGRES_DB=go-backend-template
+    networks:
+      - network
+
+volumes:
+  postgres_data:
+    name: 'go-backend-template-data'
+
+networks:
+  network:
+    name: 'go-backend-template-data'
