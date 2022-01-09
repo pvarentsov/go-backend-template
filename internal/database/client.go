@@ -3,7 +3,7 @@ package database
 import (
 	"context"
 	"github.com/jackc/pgx/v4/pgxpool"
-	"go-backend-template/internal/errors"
+	"go-backend-template/internal/util/errors"
 )
 
 type Client struct {

@@ -5,8 +5,8 @@ import (
 
 	"go-backend-template/internal/database"
 	"go-backend-template/internal/dto"
-	"go-backend-template/internal/errors"
 	"go-backend-template/internal/util/crypto"
+	"go-backend-template/internal/util/errors"
 )
 
 type AuthUsecases struct {
@@ -17,8 +17,7 @@ type AuthUsecases struct {
 func (u *AuthUsecases) Login(ctx context.Context, loginUserDTO dto.LoginUser) (dto.LoggedUser, error) {
 	user, err := u.dbService.Repositories().User.GetByEmail(ctx, loginUserDTO.Email)
 	if err != nil {
-		return dto.LoggedUser{}, errors.
-			New(errors.WrongCredentialsError, "").
+		return dto.LoggedUser{}, errors.New(errors.WrongCredentialsError, "").
 			SetInternal(err)
 	}
 

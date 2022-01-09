@@ -3,7 +3,7 @@ package crypto
 import (
 	"time"
 
-	"go-backend-template/internal/errors"
+	"go-backend-template/internal/util/errors"
 
 	"github.com/gofrs/uuid"
 	"github.com/golang-jwt/jwt"

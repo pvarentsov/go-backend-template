@@ -1,8 +1,8 @@
 package model
 
 import (
-	"go-backend-template/internal/errors"
 	"go-backend-template/internal/util/crypto"
+	"go-backend-template/internal/util/errors"
 
 	"github.com/go-ozzo/ozzo-validation"
 	"github.com/go-ozzo/ozzo-validation/is"

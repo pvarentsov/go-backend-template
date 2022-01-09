@@ -1,8 +1,8 @@
 package repository
 
 import (
-	"go-backend-template/internal/errors"
 	"go-backend-template/internal/model"
+	"go-backend-template/internal/util/errors"
 
 	"github.com/jackc/pgconn"
 	"github.com/jackc/pgerrcode"
@@ -16,8 +16,7 @@ func parseAddUserError(user *model.User, err error) error {
 	if isPgError && pgError.Code == pgerrcode.UniqueViolation {
 		switch pgError.ConstraintName {
 		case "users_email_key":
-			return errors.
-				Errorf(errors.AlreadyExistsError, "user with email \"%s\" already exists", user.Email).
+			return errors.Errorf(errors.AlreadyExistsError, "user with email \"%s\" already exists", user.Email).
 				SetInternal(err)
 		default:
 			return errors.New(errors.DatabaseError, "add user failed").SetInternal(err)
@@ -35,13 +34,11 @@ func parseGetUserByIdError(userId int64, err error) error {
 	pgError, isPgError := err.(*pgconn.PgError)
 
 	if isPgError && pgError.Code == pgerrcode.NoDataFound {
-		return errors.
-			Errorf(errors.NotFoundError, "user with id \"%d\" not found", userId).
+		return errors.Errorf(errors.NotFoundError, "user with id \"%d\" not found", userId).
 			SetInternal(err)
 	}
 	if err.Error() == "no rows in result set" {
-		return errors.
-			Errorf(errors.NotFoundError, "user with id \"%d\" not found", userId).
+		return errors.Errorf(errors.NotFoundError, "user with id \"%d\" not found", userId).
 			SetInternal(err)
 	}
 
@@ -52,13 +49,11 @@ func parseGetUserByEmailError(email string, err error) error {
 	pgError, isPgError := err.(*pgconn.PgError)
 
 	if isPgError && pgError.Code == pgerrcode.NoDataFound {
-		return errors.
-			Errorf(errors.NotFoundError, "user with email \"%s\" not found", email).
+		return errors.Errorf(errors.NotFoundError, "user with email \"%s\" not found", email).
 			SetInternal(err)
 	}
 	if err.Error() == "no rows in result set" {
-		return errors.
-			Errorf(errors.NotFoundError, "user with email \"%s\" not found", email).
+		return errors.Errorf(errors.NotFoundError, "user with email \"%s\" not found", email).
 			SetInternal(err)
 	}
 

@@ -2,7 +2,7 @@ package http
 
 import (
 	"github.com/gin-gonic/gin"
-	"go-backend-template/internal/errors"
+	"go-backend-template/internal/util/errors"
 )
 
 func bindBody(payload interface{}, c *gin.Context) error {

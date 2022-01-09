@@ -1,7 +1,7 @@
 package http
 
 import (
-	"go-backend-template/internal/errors"
+	"go-backend-template/internal/util/errors"
 	"net/http"
 )
 

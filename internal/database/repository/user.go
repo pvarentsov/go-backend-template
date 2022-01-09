@@ -3,8 +3,8 @@ package repository
 import (
 	"context"
 
-	"go-backend-template/internal/errors"
 	"go-backend-template/internal/model"
+	"go-backend-template/internal/util/errors"
 
 	"github.com/doug-martin/goqu/v9"
 )

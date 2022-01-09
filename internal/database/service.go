@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"go-backend-template/internal/database/repository"
-	"go-backend-template/internal/errors"
+	"go-backend-template/internal/util/errors"
 )
 
 type Service interface {
