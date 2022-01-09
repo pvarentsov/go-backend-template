@@ -49,7 +49,7 @@ func getReqInfo(c *gin.Context) contexts.ReqInfo {
 	return contexts.ReqInfo{}
 }
 
-func withReqInfo(c *gin.Context) context.Context {
+func contextWithReqInfo(c *gin.Context) context.Context {
 	info, ok := c.Get(reqInfoKey)
 	if ok {
 		return contexts.WithReqInfo(c, info.(contexts.ReqInfo))

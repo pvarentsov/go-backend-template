@@ -78,7 +78,7 @@ func (r *router) addUser(c *gin.Context) {
 		return
 	}
 
-	user, err := r.server.usecases.User.Add(withReqInfo(c), addUserDTO)
+	user, err := r.server.usecases.User.Add(contextWithReqInfo(c), addUserDTO)
 	if err != nil {
 		errorResponse(err, nil).reply(c)
 		return
@@ -98,7 +98,7 @@ func (r *router) updateMyInfo(c *gin.Context) {
 		return
 	}
 
-	err := r.server.usecases.User.UpdateInfo(withReqInfo(c), updateUserDTO)
+	err := r.server.usecases.User.UpdateInfo(contextWithReqInfo(c), updateUserDTO)
 	if err != nil {
 		errorResponse(err, nil).reply(c)
 		return
@@ -118,7 +118,7 @@ func (r *router) changeMyPassword(c *gin.Context) {
 		return
 	}
 
-	err := r.server.usecases.User.ChangePassword(withReqInfo(c), changeUserPasswordDTO)
+	err := r.server.usecases.User.ChangePassword(contextWithReqInfo(c), changeUserPasswordDTO)
 	if err != nil {
 		errorResponse(err, nil).reply(c)
 		return
@@ -130,7 +130,7 @@ func (r *router) changeMyPassword(c *gin.Context) {
 func (r *router) getMe(c *gin.Context) {
 	reqInfo := getReqInfo(c)
 
-	user, err := r.server.usecases.User.GetById(withReqInfo(c), reqInfo.UserId)
+	user, err := r.server.usecases.User.GetById(contextWithReqInfo(c), reqInfo.UserId)
 	if err != nil {
 		errorResponse(err, nil).reply(c)
 		return
