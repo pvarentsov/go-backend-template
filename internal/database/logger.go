@@ -2,7 +2,10 @@ package database
 
 import (
 	"context"
-	"log"
+	"fmt"
+	"time"
+
+	"go-backend-template/internal/util/contexts"
 
 	"github.com/jackc/pgx/v4"
 )
@@ -10,7 +13,14 @@ import (
 type Logger struct{}
 
 func (l *Logger) Log(ctx context.Context, level pgx.LogLevel, msg string, data map[string]interface{}) {
+	reqInfo := contexts.GetReqInfo(ctx)
+
 	if sql, ok := data["sql"]; ok {
-		log.Printf("[Database] %s: %s\n", msg, sql)
+		fmt.Printf("%s - [Database] TraceId: %s; UserId: %d; SQL: %s;\n\n",
+			time.Now().Format(time.RFC1123),
+			reqInfo.TraceId,
+			reqInfo.UserId,
+			sql,
+		)
 	}
 }

@@ -1,7 +1,11 @@
 package http
 
 import (
+	"fmt"
+	"time"
+
 	"go-backend-template/internal/dto"
+	"go-backend-template/internal/util/contexts"
 	"go-backend-template/internal/util/crypto"
 	"go-backend-template/internal/util/errors"
 
@@ -21,6 +25,7 @@ func newRouter(server *Server) *router {
 func (r *router) init() {
 	r.server.engine.Use(r.trace())
 	r.server.engine.Use(r.recover())
+	r.server.engine.Use(r.logger())
 
 	r.server.engine.POST("/login", r.login)
 
@@ -123,14 +128,9 @@ func (r *router) changeMyPassword(c *gin.Context) {
 }
 
 func (r *router) getMe(c *gin.Context) {
-	var userId int64
+	reqInfo := getReqInfo(c)
 
-	contextUserId, exists := c.Get("userId")
-	if exists {
-		userId = contextUserId.(int64)
-	}
-
-	user, err := r.server.usecases.User.GetById(withReqInfo(c), userId)
+	user, err := r.server.usecases.User.GetById(withReqInfo(c), reqInfo.UserId)
 	if err != nil {
 		errorResponse(err, nil).reply(c)
 		return
@@ -162,4 +162,25 @@ func (r *router) trace() gin.HandlerFunc {
 
 		setTraceId(c, traceId)
 	}
+}
+
+func (r *router) logger() gin.HandlerFunc {
+	return gin.LoggerWithFormatter(func(param gin.LogFormatterParams) string {
+		var parsedReqInfo contexts.ReqInfo
+
+		reqInfo, exists := param.Keys[reqInfoKey]
+		if exists {
+			parsedReqInfo = reqInfo.(contexts.ReqInfo)
+		}
+
+		return fmt.Sprintf("%s - [HTTP] TraceId: %s; UserId: %d; Method: %s; Path: %s; Status: %d, Latency: %s;\n\n",
+			param.TimeStamp.Format(time.RFC1123),
+			parsedReqInfo.TraceId,
+			parsedReqInfo.UserId,
+			param.Method,
+			param.Path,
+			param.StatusCode,
+			param.Latency,
+		)
+	})
 }

@@ -12,9 +12,11 @@ type Server struct {
 }
 
 func NewServer(config Config, usecases *usecase.Usecases) *Server {
+	gin.SetMode(gin.ReleaseMode)
+
 	server := &Server{
 		config:   config,
-		engine:   gin.Default(),
+		engine:   gin.New(),
 		usecases: usecases,
 	}
 

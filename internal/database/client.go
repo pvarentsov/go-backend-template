@@ -15,7 +15,7 @@ type Client struct {
 func NewClient(ctx context.Context, config Config) *Client {
 	return &Client{
 		ctx: ctx,
-		url: config.URL(),
+		url: config.ConnString(),
 	}
 }
 

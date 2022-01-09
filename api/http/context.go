@@ -6,42 +6,42 @@ import (
 	"go-backend-template/internal/util/contexts"
 )
 
-type reqInfoKey = string
+type reqInfoKeyType = string
 
 const (
-	key reqInfoKey = "req-info"
+	reqInfoKey reqInfoKeyType = "req-info"
 )
 
 func setTraceId(c *gin.Context, traceId string) {
-	info, exists := c.Get(key)
+	info, exists := c.Get(reqInfoKey)
 	if exists {
 		parsedInfo := info.(contexts.ReqInfo)
 		parsedInfo.TraceId = traceId
 
-		c.Set(key, parsedInfo)
+		c.Set(reqInfoKey, parsedInfo)
 
 		return
 	}
 
-	c.Set(key, contexts.ReqInfo{TraceId: traceId})
+	c.Set(reqInfoKey, contexts.ReqInfo{TraceId: traceId})
 }
 
 func setUserId(c *gin.Context, userId int64) {
-	info, exists := c.Get(key)
+	info, exists := c.Get(reqInfoKey)
 	if exists {
 		parsedInfo := info.(contexts.ReqInfo)
 		parsedInfo.UserId = userId
 
-		c.Set(key, parsedInfo)
+		c.Set(reqInfoKey, parsedInfo)
 
 		return
 	}
 
-	c.Set(key, contexts.ReqInfo{UserId: userId})
+	c.Set(reqInfoKey, contexts.ReqInfo{UserId: userId})
 }
 
 func getReqInfo(c *gin.Context) contexts.ReqInfo {
-	info, ok := c.Get(key)
+	info, ok := c.Get(reqInfoKey)
 	if ok {
 		return info.(contexts.ReqInfo)
 	}
@@ -50,7 +50,7 @@ func getReqInfo(c *gin.Context) contexts.ReqInfo {
 }
 
 func withReqInfo(c *gin.Context) context.Context {
-	info, ok := c.Get(key)
+	info, ok := c.Get(reqInfoKey)
 	if ok {
 		return contexts.WithReqInfo(c, info.(contexts.ReqInfo))
 	}

@@ -70,7 +70,7 @@ type databaseConfig struct {
 	url string
 }
 
-func (c *databaseConfig) URL() string {
+func (c *databaseConfig) ConnString() string {
 	return c.url
 }
 

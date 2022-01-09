@@ -27,6 +27,14 @@ func parseAddUserError(user *model.User, err error) error {
 }
 
 func parseUpdateUserError(user *model.User, err error) error {
+	pgError, isPgError := err.(*pgconn.PgError)
+
+	if isPgError && pgError.Code == pgerrcode.UniqueViolation {
+		return errors.
+			Errorf(errors.AlreadyExistsError, "user with email \"%s\" already exists", user.Email).
+			SetInternal(err)
+	}
+
 	return errors.New(errors.DatabaseError, "update user failed").SetInternal(err)
 }
 
