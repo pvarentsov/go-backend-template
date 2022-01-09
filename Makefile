@@ -10,19 +10,19 @@ help:
 	@echo "Usage: make [command]"
 	@echo
 	@echo "Commands:"
-	@echo "   build-http                                Build http server"
+	@echo " build-http                    Build http server"
 	@echo
-	@echo "   migration-create name={migration_name}    Create migration"
-	@echo "   migration-up                              Up migrations"
-	@echo "   migration-down                            Down last migration"
+	@echo " migration-create name={name}  Create migration"
+	@echo " migration-up                  Up migrations"
+	@echo " migration-down                Down last migration"
 	@echo
-	@echo "   docker-up                                 Up docker services"
-	@echo "   docker-down                               Down docker services"
+	@echo " docker-up                     Up docker services"
+	@echo " docker-down                   Down docker services"
 	@echo
-	@echo "   fmt                                       Format source code"
+	@echo " fmt                           Format source code"
 	@echo
 	@echo "Requirements:"
-	@echo "   migrate                                   Migration tool: https://github.com/golang-migrate/migrate"
+	@echo " migrate                       Migration tool: https://github.com/golang-migrate/migrate"
 	@echo
 
 # Build
