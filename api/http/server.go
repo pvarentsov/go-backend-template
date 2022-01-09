@@ -1,6 +1,7 @@
 package http
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"go-backend-template/internal/usecase"
 )
@@ -27,5 +28,6 @@ func NewServer(config Config, usecases *usecase.Usecases) *Server {
 }
 
 func (s Server) Listen() error {
+	fmt.Printf("API server listening at: %s\n\n", s.config.Address())
 	return s.engine.Run(s.config.Address())
 }
