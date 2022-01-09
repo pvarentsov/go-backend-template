@@ -16,7 +16,10 @@ Usecases:
 HTTP Server (gin):
   * [Server](./api/http/server.go)
   * [Router](./api/http/router.go)
-  * [Main file](./cmd/http/main.go)  
+  * [Main file](./cmd/http/main.go) 
+
+Request Collection:
+  * [InsomniaV4](./assets/api-collection.insomnia-v4.json)
 
 ## Makefile
 
