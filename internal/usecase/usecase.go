@@ -7,14 +7,16 @@ import (
 
 func NewUsecases(dbService database.Service, config Config) Usecases {
 	return Usecases{
-		Auth: &AuthUsecases{dbService: dbService, config: config},
-		User: &UserUsecases{dbService: dbService, config: config},
+		Auth:        &AuthUsecases{dbService: dbService, config: config},
+		User:        &UserUsecases{dbService: dbService, config: config},
+		Transaction: &TransactionUsecases{dbService: dbService, config: config},
 	}
 }
 
 type Usecases struct {
-	Auth *AuthUsecases
-	User *UserUsecases
+	Auth        *AuthUsecases
+	User        *UserUsecases
+	Transaction *TransactionUsecases
 }
 
 type Config interface {

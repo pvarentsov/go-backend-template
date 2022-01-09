@@ -34,6 +34,8 @@ func (r *router) init() {
 	r.server.engine.PUT("/users/me", r.authenticate, r.updateMyInfo)
 	r.server.engine.PATCH("/users/me/password", r.authenticate, r.changeMyPassword)
 
+	r.server.engine.POST("/transaction-example", r.authenticate, r.transactionExample)
+
 	r.server.engine.NoRoute(r.methodNotFound)
 }
 
@@ -131,6 +133,16 @@ func (r *router) getMe(c *gin.Context) {
 	reqInfo := getReqInfo(c)
 
 	user, err := r.server.usecases.User.GetById(contextWithReqInfo(c), reqInfo.UserId)
+	if err != nil {
+		errorResponse(err, nil).reply(c)
+		return
+	}
+
+	okResponse(user).reply(c)
+}
+
+func (r *router) transactionExample(c *gin.Context) {
+	user, err := r.server.usecases.Transaction.AddTwoUsersWithSameEmail(contextWithReqInfo(c))
 	if err != nil {
 		errorResponse(err, nil).reply(c)
 		return
