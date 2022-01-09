@@ -6,32 +6,59 @@ DB_URL = 'postgres://go-backend-template:go-backend-template@localhost:5454/go-b
 
 .SILENT: help
 help:
+	@echo
 	@echo "Usage: make [command]"
 	@echo
 	@echo "Commands:"
-	@echo "   mcreate name={migration_name}    Create migration"
-	@echo "   mup                              Up migrations"
-	@echo "   mdown                            Down last migration"
-	@echo ""
-	@echo "   fmt                              Format source code"
+	@echo "   build-http                                Build http server"
+	@echo
+	@echo "   migration-create name={migration_name}    Create migration"
+	@echo "   migration-up                              Up migrations"
+	@echo "   migration-down                            Down last migration"
+	@echo
+	@echo "   docker-up                                 Up docker services"
+	@echo "   docker-down                               Down docker services"
+	@echo
+	@echo "   fmt                                       Format source code"
+	@echo
+	@echo "Requirements:"
+	@echo "   migrate                                   Migration tool: https://github.com/golang-migrate/migrate"
+	@echo
+
+# Build
+
+.SILENT: build-http
+build-http:
+	@go build -o ./bin/http-server ./cmd/http/main.go
+	@echo executable file \"http-server\" saved in ./bin/http-server
 
 # Create migration
 
-.SILENT: "mcreate"
-mcreate:
+.SILENT: migration-create
+migration-create:
 	@migrate create -ext sql -dir ./migrations -seq $(name)
 
 # Up migration
 
-.SILENT: "mup"
-mup:
+.SILENT: migration-up
+migration-up:
 	@migrate -database $(DB_URL) -path ./migrations up
 
 # Down migration
 
-.SILENT: "mdown"
-mdown:
+.SILENT: "migration-down"
+migration-down:
 	@migrate -database $(DB_URL) -path ./migrations down 1
+
+# Docker
+
+.SILENT: docker-up
+docker-up:
+	@docker-compose up -d
+
+.SILENT: docker-down
+docker-down:
+	@docker-compose down
 
 # Format
 
