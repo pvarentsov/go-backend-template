@@ -60,7 +60,7 @@ func ParseJWT(token string, secret string) (map[string]interface{}, error) {
 
 	claims, ok := parsedToken.Claims.(jwt.MapClaims)
 	if !ok {
-		return map[string]interface{}{}, errors.New(errors.InternalError, "token validation error")
+		return map[string]interface{}{}, errors.New(errors.InternalError, "token parsing error")
 	}
 
 	payload := make(map[string]interface{})
