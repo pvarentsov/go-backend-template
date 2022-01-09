@@ -13,14 +13,14 @@ type TransactionUsecases struct {
 
 // AddTwoUsersWithSameEmail Just to show usecase example with transaction
 func (u *TransactionUsecases) AddTwoUsersWithSameEmail(ctx context.Context) (int64, error) {
-	addUserDto := dto.AddUser{
+	addUserDTO := dto.AddUser{
 		FirstName: "test",
 		LastName:  "test",
 		Email:     "test@email.com",
 		Password:  "qwerty1",
 	}
 
-	user, err := addUserDto.MapTo()
+	user, err := addUserDTO.MapTo()
 	if err != nil {
 		return 0, err
 	}
