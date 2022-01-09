@@ -2,7 +2,7 @@
 
 ## Examples
 
-Database:
+Database (pgx + goqu):
   * [Client](./internal/database/client.go)
   * [Service](./internal/database/service.go)
   * [Transaction](./internal/database/transaction.go)
@@ -13,7 +13,7 @@ Usecases:
   * [User](./internal/usecase/user.go)
   * [Usecase with transaction](./internal/usecase/transaction.go)
 
-HTTP Server:
+HTTP Server (gin):
   * [Server](./api/http/server.go)
   * [Router](./api/http/router.go)
   * [Main file](./cmd/http/main.go)  
