@@ -1,0 +1,262 @@
+{
+  "_type": "export",
+  "__export_format": 4,
+  "__export_date": "2022-01-09T18:25:42.371Z",
+  "__export_source": "insomnia.desktop.app:v2021.3.0",
+  "resources": [
+    {
+      "_id": "req_dcc2a107f73749bf995afe724452a251",
+      "parentId": "wrk_fdc8eb301881436596a6ad61b36ee257",
+      "modified": 1641752615652,
+      "created": 1641733104003,
+      "url": "localhost:3000/login",
+      "name": "Login",
+      "description": "",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n\t\"email\": \"user@email.com\",\n\t\"password\": \"qwerty1\"\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json",
+          "id": "pair_33f5ace374414a5089edf3feb65f0b41"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1640816933631,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "wrk_fdc8eb301881436596a6ad61b36ee257",
+      "parentId": null,
+      "modified": 1641733103981,
+      "created": 1641733103981,
+      "name": "Go Backend Template",
+      "description": "",
+      "scope": "collection",
+      "_type": "workspace"
+    },
+    {
+      "_id": "req_0fe1640aa39142879aac513611db093c",
+      "parentId": "wrk_fdc8eb301881436596a6ad61b36ee257",
+      "modified": 1641752608890,
+      "created": 1641733103996,
+      "url": "localhost:3000/users",
+      "name": "Add User",
+      "description": "",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n\t\"firstName\": \"FirstName\",\n\t\"lastName\": \"LastName\",\n\t\"email\": \"user@email.com\",\n\t\"password\": \"qwerty1\"\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json",
+          "id": "pair_33f5ace374414a5089edf3feb65f0b41"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1640816933606,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_c973783467d7486ba8ff984eacc97165",
+      "parentId": "wrk_fdc8eb301881436596a6ad61b36ee257",
+      "modified": 1641752651102,
+      "created": 1641733103997,
+      "url": "localhost:3000/users/me",
+      "name": "Update User Info",
+      "description": "",
+      "method": "PUT",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n\t\"firstName\": \"FirstName\",\n\t\"lastName\": \"LastName\",\n\t\"email\": \"user@email.com\"\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json",
+          "id": "pair_33f5ace374414a5089edf3feb65f0b41"
+        },
+        {
+          "name": "Authorization",
+          "value": "{{ _.accessToken }}",
+          "description": "",
+          "id": "pair_45439469e0324fdaa44f64e1a68c0b4c"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1640816933593.5,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_7d22e3b85d0f43dd8028a0c300c155d8",
+      "parentId": "wrk_fdc8eb301881436596a6ad61b36ee257",
+      "modified": 1641747858457,
+      "created": 1641747784714,
+      "url": "localhost:3000/users/me/password",
+      "name": "Change User Password",
+      "description": "",
+      "method": "PATCH",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n\t\"password\": \"qwerty1\"\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json",
+          "id": "pair_33f5ace374414a5089edf3feb65f0b41"
+        },
+        {
+          "name": "Authorization",
+          "value": "{{ _.accessToken }}",
+          "description": "",
+          "id": "pair_45439469e0324fdaa44f64e1a68c0b4c"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1640816933590.375,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_d2fc3f00cde443a090d90b2030eefd58",
+      "parentId": "wrk_fdc8eb301881436596a6ad61b36ee257",
+      "modified": 1641733533708,
+      "created": 1641733103996,
+      "url": "localhost:3000/users/me",
+      "name": "Get My Profile",
+      "description": "",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Authorization",
+          "value": "{{ _.accessToken }}",
+          "description": "",
+          "id": "pair_f51f09f8fd194d64ab8fc6b7e80d6d2c"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1640816933587.25,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_62e8c59adf0a42c1bda690f7509a2ed1",
+      "parentId": "wrk_fdc8eb301881436596a6ad61b36ee257",
+      "modified": 1641752659715,
+      "created": 1641751210267,
+      "url": "localhost:3000/transaction-example",
+      "name": "Transaction Example",
+      "description": "",
+      "method": "POST",
+      "body": {},
+      "parameters": [],
+      "headers": [],
+      "authentication": {},
+      "metaSortKey": -1640816933537.25,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "env_93860e324e0f42deaefef826a7c27731",
+      "parentId": "wrk_fdc8eb301881436596a6ad61b36ee257",
+      "modified": 1641733103984,
+      "created": 1641733103984,
+      "name": "Base Environment",
+      "data": {},
+      "dataPropertyOrder": {},
+      "color": null,
+      "isPrivate": false,
+      "metaSortKey": 1640816927246,
+      "_type": "environment"
+    },
+    {
+      "_id": "jar_09ce4d0ffaa24451820ef31fda7e04f3",
+      "parentId": "wrk_fdc8eb301881436596a6ad61b36ee257",
+      "modified": 1641733103992,
+      "created": 1641733103992,
+      "name": "Default Jar",
+      "cookies": [],
+      "_type": "cookie_jar"
+    },
+    {
+      "_id": "spc_f0dd8a8b8f054d84be42a41762875352",
+      "parentId": "wrk_fdc8eb301881436596a6ad61b36ee257",
+      "modified": 1641733104025,
+      "created": 1641733103993,
+      "fileName": "Go Backend Template",
+      "contents": "",
+      "contentType": "yaml",
+      "_type": "api_spec"
+    },
+    {
+      "_id": "env_e84bf254b8544c8cb81cc70e175022a7",
+      "parentId": "env_93860e324e0f42deaefef826a7c27731",
+      "modified": 1641752719387,
+      "created": 1641733103985,
+      "name": "Local",
+      "data": {
+        "accessToken": ""
+      },
+      "dataPropertyOrder": {
+        "&": [
+          "accessToken"
+        ]
+      },
+      "color": null,
+      "isPrivate": false,
+      "metaSortKey": 1641121117528,
+      "_type": "environment"
+    }
+  ]
+}
