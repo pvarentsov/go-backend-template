@@ -34,7 +34,7 @@ func (r *router) init() {
 	r.server.engine.PUT("/users/me", r.authenticate, r.updateMyInfo)
 	r.server.engine.PATCH("/users/me/password", r.authenticate, r.changeMyPassword)
 
-	r.server.engine.POST("/transaction-example", r.authenticate, r.transactionExample)
+	r.server.engine.POST("/transaction-example", r.transactionExample)
 
 	r.server.engine.NoRoute(r.methodNotFound)
 }
