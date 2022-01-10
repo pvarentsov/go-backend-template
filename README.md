@@ -19,7 +19,7 @@
     <a href="./internal/database/client.go">Client</a>, 
     <a href="./internal/database/service.go">Service</a>, 
     <a href="./internal/database/transaction.go">Transaction</a>, 
-    <a href="./internal/database/repository/user.go">User Repository</a>
+    <a href="./internal/database/repository/user.go">UserRepository</a>
 </td>
 </tr>
 <tr>
@@ -31,7 +31,7 @@
 <td>internal</td>
 <td align="center">dto</td>
 <td>
-    <a href="./internal/dto/add_user.go">Add User</a>,
+    <a href="./internal/dto/add_user.go">AddUser</a>,
     <a href="./internal/dto/user.go">User</a>,
     <a href="./internal/dto/">...</a>
 </td>
