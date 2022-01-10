@@ -6,15 +6,15 @@
 <table align="center">
 <thead>
 <tr>
-<th align="center">Layer</th>
-<th align="center">Package</th>
+<th>Layer</th>
+<th>Package</th>
 <th>Implementations</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>internal</td>
-<td>database (<a href="https://github.com/jackc/pgx">pgx</a> + <a href="https://github.com/doug-martin/goqu">goqu</a>)</td>
+<td align="center">internal</td>
+<td align="center">database (<a href="https://github.com/jackc/pgx">pgx</a> + <a href="https://github.com/doug-martin/goqu">goqu</a>)</td>
 <td>
     <a href="./internal/database/client.go">Client</a>, 
     <a href="./internal/database/service.go">Service</a>, 
@@ -23,34 +23,31 @@
 </td>
 </tr>
 <tr>
-<td>internal</td>
-<td>model (<a href="https://github.com/go-ozzo/ozzo-validation">ozzo-validation</a>)</td>
+<td align="center">internal</td>
+<td align="center">model (<a href="https://github.com/go-ozzo/ozzo-validation">ozzo-validation</a>)</td>
 <td><a href="./internal/model/user.go">User</a></td>
 </tr>
 <tr>
 <td>internal</td>
-<td >dto</td>
+<td align="center">dto</td>
 <td>
     <a href="./internal/dto/add_user.go">Add User</a>,
-    <a href="./internal/dto/change_user_password.go">Change User Password</a>,
-    <a href="./internal/dto/logged_user.go">Logged User</a>,
-    <a href="./internal/dto/login_user.go">Login User</a>,
-    <a href="./internal/dto/update_user_info.go">Update User Info</a>,
-    <a href="./internal/dto/user.go">User</a>
+    <a href="./internal/dto/user.go">User</a>,
+    <a href="./internal/dto/">...</a>
 </td>
 </tr>
 <tr>
-<td>internal</td>
-<td>usecase</td>
+<td align="center">internal</td>
+<td align="center">usecase</td>
 <td>
     <a href="./internal/usecase/auth.go">Auth</a>, 
     <a href="./internal/usecase/user.go">User</a>, 
-    <a href="./internal/usecase/transaction.go">Usecase with transaction</a>
+    <a href="./internal/usecase/transaction.go">Transaction</a> (example with transaction)
 </td>
 </tr>
 <tr>
-<td>api</td>
-<td>http (<a href="https://github.com/gin-gonic/gin">gin</a>)</td>
+<td align="center">api</td>
+<td align="center">http (<a href="https://github.com/gin-gonic/gin">gin</a>)</td>
 <td><a href="./api/http/server.go">Server</a>, <a href="./api/http/router.go">Router</a>, <a href="./cmd/http/main.go">Main file</a></td>
 </tr>
 </tbody>
