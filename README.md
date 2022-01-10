@@ -33,6 +33,8 @@
 <td>
     <a href="./internal/dto/add_user.go">AddUser</a>,
     <a href="./internal/dto/user.go">User</a>,
+    <a href="./internal/dto/login_user.go">LoginUser</a>,
+    <a href="./internal/dto/logged_user.go">LoggedUser</a>,
     <a href="./internal/dto/">...</a>
 </td>
 </tr>
