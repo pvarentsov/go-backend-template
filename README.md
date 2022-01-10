@@ -1,8 +1,5 @@
 # Go Backend Template
 
-## Examples
-
-
 | Layer         | Implementations |
 | ------------- |-----------------|
 | Database ([pgx](https://github.com/jackc/pgx) + [goqu](https://github.com/doug-martin/goqu))| [Client](./internal/database/client.go), [Service](./internal/database/service.go), [Transaction](./internal/database/transaction.go), [User Repository](./internal/database/repository/user.go) |
