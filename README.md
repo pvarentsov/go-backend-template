@@ -1,6 +1,6 @@
 # Go Backend Template
 
-<br>
+## Examples
 
 <table align="center">
 <thead>
@@ -28,8 +28,6 @@
 </tr>
 </tbody>
 </table>
-
-<br>
 
 ## Makefile
 
