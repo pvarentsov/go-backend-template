@@ -2,6 +2,7 @@
 
 ## Examples
 
+<br>
 <table align="center">
 <thead>
 <tr>
@@ -28,6 +29,7 @@
 </tr>
 </tbody>
 </table>
+<br>
 
 ## Makefile
 
