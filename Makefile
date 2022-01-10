@@ -22,7 +22,8 @@ help:
 	@echo " fmt                           Format source code"
 	@echo
 	@echo "Requirements:"
-	@echo " migrate                       Migration tool: https://github.com/golang-migrate/migrate"
+	@echo " docker-compose                Docker Compose CLI: https://docs.docker.com/compose/reference"
+	@echo " migrate                       Migration CLI tool: https://github.com/golang-migrate/migrate"
 	@echo
 
 # Build

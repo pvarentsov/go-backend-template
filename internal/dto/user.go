@@ -4,8 +4,6 @@ import (
 	"go-backend-template/internal/model"
 )
 
-// User
-
 type User struct {
 	Id        int64  `json:"id"`
 	FirstName string `json:"firstName"`

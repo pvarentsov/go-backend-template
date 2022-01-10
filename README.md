@@ -89,7 +89,9 @@ Commands:
  fmt                           Format source code
 
 Requirements:
- migrate                       Migration tool: https://github.com/golang-migrate/migrate
+ docker-compose                Docker Compose CLI: https://docs.docker.com/compose/reference
+ migrate                       Migration CLI tool: https://github.com/golang-migrate/migrate
+
 ```
 
 ## Request Collection
