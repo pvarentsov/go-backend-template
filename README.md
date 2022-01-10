@@ -48,7 +48,20 @@
 <tr>
 <td align="center">api</td>
 <td align="center">http (<a href="https://github.com/gin-gonic/gin">gin</a>)</td>
-<td><a href="./api/http/server.go">Server</a>, <a href="./api/http/router.go">Router</a>, <a href="./cmd/http/main.go">Main file</a></td>
+<td>
+    <a href="./api/http/server.go">Server</a>, 
+    <a href="./api/http/router.go">Router</a>
+</td>
+</tr>
+<tr>
+<td align="center">config</td>
+<td align="center">config</td>
+<td><a href="./config/config.go">Config</a></td>
+</tr>
+<tr>
+<td align="center">cmd</td>
+<td align="center">http/main</td>
+<td><a href="./cmd/http/main.go">Main file</a></td>
 </tr>
 </tbody>
 </table>
