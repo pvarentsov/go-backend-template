@@ -42,7 +42,7 @@
 <td>
     <a href="./internal/usecase/auth.go">Auth</a>, 
     <a href="./internal/usecase/user.go">User</a>, 
-    <a href="./internal/usecase/transaction.go">Transaction</a> (example with transaction)
+    <a href="./internal/usecase/transaction.go">Transaction</a> (usecase example with transaction)
 </td>
 </tr>
 <tr>
