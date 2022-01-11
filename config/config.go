@@ -7,18 +7,40 @@ import (
 	"go-backend-template/api/http"
 	"go-backend-template/internal/database"
 	"go-backend-template/internal/usecase"
+
+	"github.com/spf13/viper"
 )
 
 // Config
 
 type Config struct {
-	httpHost string
-	httpPort int
+	httpHost string `mapstructure:"HTTP_HOST"`
+	httpPort int    `mapstructure:"HTTP_PORT"`
 
-	databaseURL string
+	databaseURL string `mapstructure:"DATABASE_URL"`
 
-	accessTokenExpiresTTL int
-	accessTokenSecret     string
+	accessTokenExpiresTTL int    `mapstructure:"ACCESS_TOKEN_EXPIRES_TTL"`
+	accessTokenSecret     string `mapstructure:"ACCESS_TOKEN_SECRET"`
+}
+
+func ParseEnv(envPath string) (*Config, error) {
+	viper.SetConfigType("env")
+	viper.AutomaticEnv()
+
+	if envPath != "" {
+		viper.SetConfigFile(envPath)
+	}
+	if err := viper.ReadInConfig(); err != nil {
+		return nil, err
+	}
+
+	var config Config
+
+	if err := viper.Unmarshal(&config); err != nil {
+		return nil, err
+	}
+
+	return &config, nil
 }
 
 func TestConfig() *Config {
