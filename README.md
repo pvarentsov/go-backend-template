@@ -1,4 +1,6 @@
-<h1 align="center"><img height="22" src="./assets/go-icon.png"> Go Backend Template</h1>
+<h1 align="center">
+    <img height="22" src="./assets/gopher-icon-1.png"> Go Backend Template <img height="22" src="./assets/gopher-icon-2.png">
+</h1>
 
 ## Structure
 
