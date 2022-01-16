@@ -94,6 +94,32 @@ Requirements:
 
 ```
 
+## HTTP Server
+
+#### Help
+
+```shell
+$ ./bin/http-server --help
+
+Usage: http-server
+
+Flags:
+  -h, --help               Show context-sensitive help.
+      --env-path=STRING    Path to env config file
+```
+
+#### Configuration
+
+Configuring is based on the environment variables. See [.env.template](./config/env/.env.template).
+
+```shell
+# Expose env vars before and start server
+$ ./bin/http-server
+
+# Override env vars from file and start server
+$ ./bin/http-server --env-path ./config/env/.env
+```
+
 ## Request Collection
 * [InsomniaV4](./assets/api-collection.insomnia-v4.json)
 

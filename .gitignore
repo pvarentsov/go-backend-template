@@ -2,3 +2,6 @@
 .vscode/*
 
 bin
+
+config/env/*
+!config/env/.env.template

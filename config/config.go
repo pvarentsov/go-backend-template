@@ -8,70 +8,55 @@ import (
 	"go-backend-template/internal/database"
 	"go-backend-template/internal/usecase"
 
-	"github.com/spf13/viper"
+	"github.com/kelseyhightower/envconfig"
+	"github.com/subosito/gotenv"
 )
 
 // Config
 
 type Config struct {
-	httpHost string `mapstructure:"HTTP_HOST"`
-	httpPort int    `mapstructure:"HTTP_PORT"`
+	HttpHost string `envconfig:"HTTP_HOST"`
+	HttpPort int    `envconfig:"HTTP_PORT"`
 
-	databaseURL string `mapstructure:"DATABASE_URL"`
+	DatabaseURL string `envconfig:"DATABASE_URL"`
 
-	accessTokenExpiresTTL int    `mapstructure:"ACCESS_TOKEN_EXPIRES_TTL"`
-	accessTokenSecret     string `mapstructure:"ACCESS_TOKEN_SECRET"`
+	AccessTokenExpiresTTL int    `envconfig:"ACCESS_TOKEN_EXPIRES_TTL"`
+	AccessTokenSecret     string `envconfig:"ACCESS_TOKEN_SECRET"`
 }
 
 func ParseEnv(envPath string) (*Config, error) {
-	viper.SetConfigType("env")
-	viper.AutomaticEnv()
-
 	if envPath != "" {
-		viper.SetConfigFile(envPath)
-	}
-	if err := viper.ReadInConfig(); err != nil {
-		return nil, err
+		if err := gotenv.OverLoad(envPath); err != nil {
+			return nil, err
+		}
 	}
 
 	var config Config
 
-	if err := viper.Unmarshal(&config); err != nil {
+	if err := envconfig.Process("", &config); err != nil {
 		return nil, err
 	}
 
 	return &config, nil
 }
 
-func TestConfig() *Config {
-	return &Config{
-		httpHost: "0.0.0.0",
-		httpPort: 3000,
-
-		databaseURL: "postgres://go-backend-template:go-backend-template@localhost:5454/go-backend-template",
-
-		accessTokenExpiresTTL: 2 * 60,
-		accessTokenSecret:     "secret",
-	}
-}
-
 func (c *Config) HTTP() http.Config {
 	return &httpConfig{
-		host: c.httpHost,
-		port: c.httpPort,
+		host: c.HttpHost,
+		port: c.HttpPort,
 	}
 }
 
 func (c *Config) Usecase() usecase.Config {
 	return &usecaseConfig{
-		accessTokenExpiresTTL: c.accessTokenExpiresTTL,
-		accessTokenSecret:     c.accessTokenSecret,
+		accessTokenExpiresTTL: c.AccessTokenExpiresTTL,
+		accessTokenSecret:     c.AccessTokenSecret,
 	}
 }
 
 func (c *Config) Database() database.Config {
 	return &databaseConfig{
-		url: c.databaseURL,
+		url: c.DatabaseURL,
 	}
 }
 

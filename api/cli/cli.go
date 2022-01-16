@@ -6,7 +6,7 @@ import (
 )
 
 type CLI struct {
-	envPath string `help:"(Optional) Path to env config file" optional:""`
+	EnvPath string `help:"Path to env config file" type:"path" optional:""`
 }
 
 func NewCLI() *CLI {
@@ -14,7 +14,7 @@ func NewCLI() *CLI {
 }
 
 func (c *CLI) ParseConfig() (*config.Config, error) {
-	kong.Parse(&c)
+	kong.Parse(c)
 
-	return config.ParseEnv(c.envPath)
+	return config.ParseEnv(c.EnvPath)
 }
