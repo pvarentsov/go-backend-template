@@ -1,5 +1,5 @@
 <h1 align="center">
-    <img height="24" src="./assets/gopher-icon-1.png"> Go Backend Template <img height="24" src="./assets/gopher-icon-2.png">
+    <img height="30" src="./assets/gopher-icon-1.png"> Go Backend Template <img height="30" src="./assets/gopher-icon-2.png">
 </h1>
 
 ## Structure
