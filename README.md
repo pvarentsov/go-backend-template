@@ -1,5 +1,7 @@
 # Go Backend Template
 
+<img align="center" src="./assets/go-icon.png">
+
 ## Structure
 
 <br>
@@ -119,6 +121,8 @@ $ ./bin/http-server
 # Expose env vars from the file and start server
 $ ./bin/http-server --env-path ./config/env/.env
 ```
+
+<a href="https://www.flaticon.com/free-icons/go-lang" title="go lang icons">Go lang icons created by Freepik - Flaticon</a>
 
 ## Request Collection
 * [InsomniaV4](./assets/api-collection.insomnia-v4.json)
