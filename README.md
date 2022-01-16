@@ -19,9 +19,9 @@
 <td align="center">internal/util</td>
 <td align="center">contexts; crypto; errors</td>
 <td>
-    contexts: <a href="./internal/util/contexts">Context</a>;
+    contexts: <a href="./internal/util/contexts/context.go">Context</a>;
     crypto: <a href="./internal/util/crypto/password.go">Password</a>, <a href="./internal/util/crypto/token.go">Token</a>;
-    errors: <a href="./internal/util/errors/error.go.go">Error</a>, <a href="./internal/util/errors/status.go.go">Status</a>
+    errors: <a href="./internal/util/errors/error.go">Error</a>, <a href="./internal/util/errors/status.go">Status</a>
 </td>
 </tr>
 
