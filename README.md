@@ -2,8 +2,6 @@
     <img height="80" src="./assets/gopher-icon.gif"><br>Backend Template
 </h1>
 
-## Structure
-
 <br>
 <table align="center">
 <thead>
