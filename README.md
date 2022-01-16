@@ -14,6 +14,17 @@
 </tr>
 </thead>
 <tbody>
+
+<tr>
+<td align="center">internal/util</td>
+<td align="center">contexts; crypto; errors</td>
+<td>
+    contexts: <a href="./internal/util/contexts">Context</a>;
+    crypto: <a href="./internal/util/crypto/password.go">Password</a>, <a href="./internal/util/crypto/token.go">Token</a>;
+    errors: <a href="./internal/util/errors/error.go.go">Error</a>, <a href="./internal/util/errors/status.go.go">Status</a>
+</td>
+</tr>
+
 <tr>
 <td align="center">internal</td>
 <td align="center">database (<a href="https://github.com/jackc/pgx">pgx</a> + <a href="https://github.com/doug-martin/goqu">goqu</a>)</td>
@@ -24,11 +35,13 @@
     <a href="./internal/database/repository/user.go">UserRepository</a>
 </td>
 </tr>
+
 <tr>
 <td align="center">internal</td>
 <td align="center">model (<a href="https://github.com/go-ozzo/ozzo-validation">ozzo-validation</a>)</td>
 <td><a href="./internal/model/user.go">User</a></td>
 </tr>
+
 <tr>
 <td>internal</td>
 <td align="center">dto</td>
@@ -40,6 +53,7 @@
     <a href="./internal/dto/">...</a>
 </td>
 </tr>
+
 <tr>
 <td align="center">internal</td>
 <td align="center">usecase</td>
@@ -49,6 +63,7 @@
     <a href="./internal/usecase/transaction.go">Transaction</a> (usecase example with transaction)
 </td>
 </tr>
+
 <tr>
 <td align="center">api</td>
 <td align="center">http (<a href="https://github.com/gin-gonic/gin">gin</a>)</td>
@@ -57,16 +72,22 @@
     <a href="./api/http/router.go">Router</a>
 </td>
 </tr>
+
 <tr>
 <td align="center">config</td>
 <td align="center">config</td>
-<td><a href="./config/config.go">Config</a></td>
+<td>
+    <a href="./config/config.go">Config</a>,
+    <a href="./config/env">ENV files</a>
+</td>
 </tr>
+
 <tr>
 <td align="center">cmd</td>
 <td align="center">http/main</td>
 <td><a href="./cmd/http/main.go">Main file</a></td>
 </tr>
+
 </tbody>
 </table>
 <br>
