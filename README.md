@@ -1,6 +1,8 @@
 # Go Backend Template
 
-<img align="center" height="150" src="./assets/go-icon.png">
+<p align="center">
+  <img height="100" src="./assets/go-icon.png">
+</p>
 
 ## Structure
 
