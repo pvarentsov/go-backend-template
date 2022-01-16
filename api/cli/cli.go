@@ -5,16 +5,23 @@ import (
 	"go-backend-template/config"
 )
 
-type CLI struct {
+// Scheme
+
+type scheme struct {
 	EnvPath string `help:"Path to env config file" type:"path" optional:""`
 }
 
-func NewCLI() *CLI {
-	return &CLI{}
+// Parser
+
+type Parser struct {
+	scheme scheme
 }
 
-func (c *CLI) ParseConfig() (*config.Config, error) {
-	kong.Parse(c)
+func NewParser() *Parser {
+	return &Parser{scheme: scheme{}}
+}
 
-	return config.ParseEnv(c.EnvPath)
+func (p *Parser) ParseConfig() (*config.Config, error) {
+	kong.Parse(&p.scheme)
+	return config.ParseEnv(p.scheme.EnvPath)
 }

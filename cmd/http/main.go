@@ -12,9 +12,9 @@ import (
 
 func main() {
 	ctx := context.Background()
-	cliScheme := cli.NewCLI()
+	parser := cli.NewParser()
 
-	conf, err := cliScheme.ParseConfig()
+	conf, err := parser.ParseConfig()
 	if err != nil {
 		log.Fatal(err)
 	}
