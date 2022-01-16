@@ -1,6 +1,6 @@
 # Go Backend Template
 
-## Examples
+## Structure
 
 <br>
 <table align="center">
