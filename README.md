@@ -1,4 +1,4 @@
-<h1 align="center"><img height="24" src="./assets/go-icon.png"> Go Backend Template</h1>
+<h1 align="center"><img height="22" src="./assets/go-icon.png"> Go Backend Template</h1>
 
 ## Structure
 
