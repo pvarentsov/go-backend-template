@@ -122,8 +122,6 @@ $ ./bin/http-server
 $ ./bin/http-server --env-path ./config/env/.env
 ```
 
-<a href="https://www.flaticon.com/free-icons/go-lang" title="go lang icons">Go lang icons created by Freepik - Flaticon</a>
-
 ## Request Collection
 * [InsomniaV4](./assets/api-collection.insomnia-v4.json)
 
