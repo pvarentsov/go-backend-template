@@ -41,7 +41,7 @@
 </tr>
 
 <tr>
-<td>internal</td>
+<td align="center">internal</td>
 <td align="center">dto</td>
 <td>
     <a href="./internal/dto/add_user.go">AddUser</a>,
