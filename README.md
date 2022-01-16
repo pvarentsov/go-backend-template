@@ -1,5 +1,5 @@
 <h1 align="center">
-    <img height="50" src="./assets/gopher-icon.gif"><br>Backend Template
+    <img height="80" src="./assets/gopher-icon.gif"><br>Backend Template
 </h1>
 
 ## Structure
