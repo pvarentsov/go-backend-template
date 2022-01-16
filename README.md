@@ -116,7 +116,7 @@ Configuration is based on the environment variables. See [.env.template](./confi
 # Expose env vars before and start server
 $ ./bin/http-server
 
-# Override env vars from the file and start server
+# Expose env vars from the file and start server
 $ ./bin/http-server --env-path ./config/env/.env
 ```
 
