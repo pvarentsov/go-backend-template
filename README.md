@@ -110,7 +110,7 @@ Flags:
 
 ### Configuration
 
-Configuring is based on the environment variables. See [.env.template](./config/env/.env.template).
+Configuration is based on the environment variables. See [.env.template](./config/env/.env.template).
 
 ```shell
 # Expose env vars before and start server
