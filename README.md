@@ -96,7 +96,7 @@ Requirements:
 
 ## HTTP Server
 
-#### Help
+### Help
 
 ```shell
 $ ./bin/http-server --help
@@ -108,7 +108,7 @@ Flags:
       --env-path=STRING    Path to env config file
 ```
 
-#### Configuration
+### Configuration
 
 Configuring is based on the environment variables. See [.env.template](./config/env/.env.template).
 
@@ -116,7 +116,7 @@ Configuring is based on the environment variables. See [.env.template](./config/
 # Expose env vars before and start server
 $ ./bin/http-server
 
-# Override env vars from file and start server
+# Override env vars from the file and start server
 $ ./bin/http-server --env-path ./config/env/.env
 ```
 
