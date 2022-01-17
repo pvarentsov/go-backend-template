@@ -2,7 +2,7 @@
     <img height="80" src="./assets/gopher-icon.gif"><br>Backend Template
 </h1>
 
-> Clean architecture based backend template in Go.
+> Clean architecture based backend template in **Go**.
 
 <br>
 <table align="center">
