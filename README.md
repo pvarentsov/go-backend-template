@@ -15,7 +15,7 @@
 
 <tr>
 <td align="center">internal/util</td>
-<td align="center">contexts; crypto; errors</td>
+<td align="center">contexts; crypto (<a href="https://pkg.go.dev/golang.org/x/crypto/bcrypt">bcrypt</a> + <a href="https://github.com/golang-jwt/jwt">jwt</a> + <a href="https://github.com/gofrs/uuid">uuid</a>); errors</td>
 <td>
     contexts: <a href="./internal/util/contexts/context.go">Context</a>;
     crypto: <a href="./internal/util/crypto/password.go">Password</a>, <a href="./internal/util/crypto/token.go">Token</a>;
@@ -73,7 +73,7 @@
 
 <tr>
 <td align="center">config</td>
-<td align="center">config</td>
+<td align="center">config (<a href="https://github.com/kelseyhightower/envconfig">envconfig</a> + <a href="https://github.com/subosito/gotenv">gotenv</a>)</td>
 <td>
     <a href="./config/config.go">Config</a>,
     <a href="./config/env">ENV files</a>
