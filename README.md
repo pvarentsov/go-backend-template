@@ -15,7 +15,7 @@
 
 <tr>
 <td align="center">internal/util</td>
-<td align="center">contexts; crypto (<a href="https://pkg.go.dev/golang.org/x/crypto/bcrypt">bcrypt</a> + <a href="https://github.com/golang-jwt/jwt">jwt</a> + <a href="https://github.com/gofrs/uuid">uuid</a>); errors</td>
+<td align="center">crypto (<a href="https://pkg.go.dev/golang.org/x/crypto/bcrypt">bcrypt</a> + <a href="https://github.com/golang-jwt/jwt">jwt</a> + <a href="https://github.com/gofrs/uuid">uuid</a>);<br>contexts; errors</td>
 <td>
     contexts: <a href="./internal/util/contexts/context.go">Context</a>;
     crypto: <a href="./internal/util/crypto/password.go">Password</a>, <a href="./internal/util/crypto/token.go">Token</a>;
@@ -63,6 +63,15 @@
 </tr>
 
 <tr>
+<td align="center">config</td>
+<td align="center">config (<a href="https://github.com/kelseyhightower/envconfig">envconfig</a> + <a href="https://github.com/subosito/gotenv">gotenv</a>)</td>
+<td>
+    <a href="./config/config.go">Config</a>,
+    <a href="./config/env">ENV files</a>
+</td>
+</tr>
+
+<tr>
 <td align="center">api</td>
 <td align="center">http (<a href="https://github.com/gin-gonic/gin">gin</a>)</td>
 <td>
@@ -72,11 +81,10 @@
 </tr>
 
 <tr>
-<td align="center">config</td>
-<td align="center">config (<a href="https://github.com/kelseyhightower/envconfig">envconfig</a> + <a href="https://github.com/subosito/gotenv">gotenv</a>)</td>
+<td align="center">api</td>
+<td align="center">cli (<a href="https://github.com/alecthomas/kong">kong</a>)</td>
 <td>
-    <a href="./config/config.go">Config</a>,
-    <a href="./config/env">ENV files</a>
+    <a href="./api/cli/cli.go">Parser</a>
 </td>
 </tr>
 
