@@ -13,7 +13,7 @@ import (
 type Logger struct{}
 
 func (l *Logger) Log(ctx context.Context, level pgx.LogLevel, msg string, data map[string]interface{}) {
-	reqInfo := contexts.GetReqInfo(ctx)
+	reqInfo, _ := contexts.GetReqInfo(ctx)
 
 	if sql, ok := data["sql"]; ok {
 		fmt.Printf("%s - [Database] TraceId: %s; UserId: %d; SQL: %s;\n\n",

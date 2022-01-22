@@ -17,11 +17,11 @@ func WithReqInfo(ctx context.Context, info ReqInfo) context.Context {
 	return context.WithValue(ctx, key, info)
 }
 
-func GetReqInfo(ctx context.Context) ReqInfo {
-	info, ok := ctx.Value(key).(ReqInfo)
+func GetReqInfo(ctx context.Context) (ReqInfo, bool) {
+	reqInfo, ok := ctx.Value(key).(ReqInfo)
 	if ok {
-		return info
+		return reqInfo, true
 	}
 
-	return ReqInfo{}
+	return ReqInfo{}, false
 }
