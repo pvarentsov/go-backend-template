@@ -37,13 +37,13 @@ func (s *service) Repos() Repos {
 }
 
 func (s *service) BeginTx(ctx context.Context) (Transaction, error) {
-	exec, err := s.client.pool.Begin(ctx)
+	conn, err := s.client.pool.Begin(ctx)
 	if err != nil {
 		return nil, errors.New(errors.DatabaseError, "cannot open transaction").SetInternal(err)
 	}
 
-	repos := newRepos(exec, goqu.Dialect("postgres"))
-	transaction := newTransaction(exec, repos)
+	repos := newRepos(conn, goqu.Dialect("postgres"))
+	transaction := newTransaction(conn, repos)
 
 	return transaction, nil
 }
@@ -56,16 +56,16 @@ type Transaction interface {
 	Rollback(ctx context.Context) error
 }
 
-func newTransaction(exec pgx.Tx, repos Repos) Transaction {
+func newTransaction(conn pgx.Tx, repos Repos) Transaction {
 	return &transaction{
 		repos: repos,
-		exec:  exec,
+		conn:  conn,
 	}
 }
 
 type transaction struct {
 	repos Repos
-	exec  pgx.Tx
+	conn  pgx.Tx
 }
 
 func (t *transaction) Repos() Repos {
@@ -73,7 +73,7 @@ func (t *transaction) Repos() Repos {
 }
 
 func (t *transaction) Commit(ctx context.Context) error {
-	err := t.exec.Commit(ctx)
+	err := t.conn.Commit(ctx)
 	if err != nil {
 		return errors.New(errors.DatabaseError, "cannot commit transaction").SetInternal(err)
 	}
@@ -82,7 +82,7 @@ func (t *transaction) Commit(ctx context.Context) error {
 }
 
 func (t *transaction) Rollback(ctx context.Context) error {
-	err := t.exec.Rollback(ctx)
+	err := t.conn.Rollback(ctx)
 	if err != nil {
 		return errors.New(errors.DatabaseError, "cannot rollback transaction").SetInternal(err)
 	}
