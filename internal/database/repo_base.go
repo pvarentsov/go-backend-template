@@ -8,6 +8,8 @@ import (
 	"github.com/jackc/pgx/v4"
 )
 
+// Repos
+
 type Repos struct {
 	User UserRepo
 }
@@ -18,7 +20,7 @@ func newRepos(conn connection, qb goqu.DialectWrapper) Repos {
 	}
 }
 
-// Executor
+// Connection
 
 type connection interface {
 	Query(ctx context.Context, sql string, args ...interface{}) (pgx.Rows, error)
