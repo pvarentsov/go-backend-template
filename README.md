@@ -29,10 +29,9 @@
 <td align="center">internal</td>
 <td align="center">database (<a href="https://github.com/jackc/pgx">pgx</a> + <a href="https://github.com/doug-martin/goqu">goqu</a>)</td>
 <td>
-    <a href="./internal/database/client.go">Client</a>, 
-    <a href="./internal/database/service.go">Service</a>, 
-    <a href="./internal/database/transaction.go">Transaction</a>, 
-    <a href="./internal/database/repository/user.go">UserRepository</a>
+    <a href="./internal/database/db_client.go">Client</a>, 
+    <a href="./internal/database/db_service.go">Service</a>,  
+    <a href="./internal/database/repo_user.go">UserRepository</a>
 </td>
 </tr>
 
@@ -58,9 +57,8 @@
 <td align="center">internal</td>
 <td align="center">usecase</td>
 <td>
-    <a href="./internal/usecase/auth.go">Auth</a>, 
-    <a href="./internal/usecase/user.go">User</a>, 
-    <a href="./internal/usecase/transaction.go">Transaction</a> (usecase example with transaction)
+    <a href="./internal/usecase/usecase_auth">Auth</a>, 
+    <a href="./internal/usecase/usecase_user.go">User</a>, 
 </td>
 </tr>
 
