@@ -31,7 +31,7 @@
 <td>
     <a href="./internal/database/db_client.go">Client</a>, 
     <a href="./internal/database/db_service.go">Service</a>,  
-    <a href="./internal/database/repo_user.go">UserRepository</a>
+    <a href="./internal/database/repo_user.go">UserRepo</a>
 </td>
 </tr>
 
@@ -57,8 +57,8 @@
 <td align="center">internal</td>
 <td align="center">usecase</td>
 <td>
-    <a href="./internal/usecase/usecase_auth">Auth</a>, 
-    <a href="./internal/usecase/usecase_user.go">User</a>, 
+    <a href="./internal/usecase/usecase_auth.go">Auth</a>, 
+    <a href="./internal/usecase/usecase_user.go">User</a>
 </td>
 </tr>
 
