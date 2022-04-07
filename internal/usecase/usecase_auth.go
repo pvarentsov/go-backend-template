@@ -15,7 +15,7 @@ type AuthUsecases struct {
 }
 
 func (u *AuthUsecases) Login(ctx context.Context, loginUserDTO dto.LoginUser) (dto.LoggedUser, error) {
-	user, err := u.db.Repos().User.GetByEmail(ctx, loginUserDTO.Email)
+	user, err := u.db.UserRepo.GetByEmail(ctx, loginUserDTO.Email)
 	if err != nil {
 		return dto.LoggedUser{}, errors.New(errors.WrongCredentialsError, "").
 			SetInternal(err)

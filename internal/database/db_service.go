@@ -11,68 +11,48 @@ import (
 
 // Service
 
-type Service interface {
-	Repos() Repos
-	BeginTx(ctx context.Context) (Transaction, error)
+type Service struct {
+	UserRepo UserRepo
+	client   *Client
 }
 
 func NewService(client *Client) Service {
 	repos := newRepos(client.pool, goqu.Dialect("postgres"))
 
-	service := service{
-		repos:  repos,
-		client: client,
+	return Service{
+		client:   client,
+		UserRepo: repos.User,
 	}
-
-	return &service
 }
 
-type service struct {
-	repos  Repos
-	client *Client
-}
-
-func (s *service) Repos() Repos {
-	return s.repos
-}
-
-func (s *service) BeginTx(ctx context.Context) (Transaction, error) {
+func (s *Service) BeginTx(ctx context.Context) (Transaction, error) {
 	conn, err := s.client.pool.Begin(ctx)
 	if err != nil {
-		return nil, errors.New(errors.DatabaseError, "cannot open transaction").SetInternal(err)
+		return Transaction{}, errors.New(errors.DatabaseError, "cannot open transaction").SetInternal(err)
 	}
 
-	repos := newRepos(conn, goqu.Dialect("postgres"))
-	transaction := newTransaction(conn, repos)
+	transaction := newTransaction(conn)
 
 	return transaction, nil
 }
 
 // Transaction
 
-type Transaction interface {
-	Repos() Repos
-	Commit(ctx context.Context) error
-	Rollback(ctx context.Context) error
+type Transaction struct {
+	conn     pgx.Tx
+	UserRepo UserRepo
 }
 
-func newTransaction(conn pgx.Tx, repos Repos) Transaction {
-	return &transaction{
-		repos: repos,
-		conn:  conn,
+func newTransaction(conn pgx.Tx) Transaction {
+	repos := newRepos(conn, goqu.Dialect("postgres"))
+
+	return Transaction{
+		conn:     conn,
+		UserRepo: repos.User,
 	}
 }
 
-type transaction struct {
-	repos Repos
-	conn  pgx.Tx
-}
-
-func (t *transaction) Repos() Repos {
-	return t.repos
-}
-
-func (t *transaction) Commit(ctx context.Context) error {
+func (t *Transaction) Commit(ctx context.Context) error {
 	err := t.conn.Commit(ctx)
 	if err != nil {
 		return errors.New(errors.DatabaseError, "cannot commit transaction").SetInternal(err)
@@ -81,7 +61,7 @@ func (t *transaction) Commit(ctx context.Context) error {
 	return nil
 }
 
-func (t *transaction) Rollback(ctx context.Context) error {
+func (t *Transaction) Rollback(ctx context.Context) error {
 	err := t.conn.Rollback(ctx)
 	if err != nil {
 		return errors.New(errors.DatabaseError, "cannot rollback transaction").SetInternal(err)
