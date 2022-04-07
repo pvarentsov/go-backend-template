@@ -13,6 +13,8 @@ type UserUsecases struct {
 }
 
 func (u *UserUsecases) Add(ctx context.Context, addUserDTO dto.AddUser) (int64, error) {
+	var userId int64
+
 	user, err := addUserDTO.MapTo()
 	if err != nil {
 		return 0, err
@@ -20,34 +22,23 @@ func (u *UserUsecases) Add(ctx context.Context, addUserDTO dto.AddUser) (int64, 
 
 	// Transaction demonstration
 
-	tx, err := u.db.BeginTx(ctx)
-	if err != nil {
-		return 0, err
-	}
-
-	userId, err := tx.UserRepo.Add(ctx, user)
-	if err != nil {
-		if err := tx.Rollback(ctx); err != nil {
-			return 0, err
+	err = u.db.BeginTx(ctx, func(ctx context.Context, tx database.Transaction) error {
+		userId, err = tx.UserRepo.Add(ctx, user)
+		if err != nil {
+			return err
 		}
-		return 0, err
-	}
 
-	user.Id = userId
+		user.Id = userId
 
-	_, err = tx.UserRepo.Update(ctx, user)
-	if err != nil {
-		if err := tx.Rollback(ctx); err != nil {
-			return 0, err
+		userId, err = tx.UserRepo.Update(ctx, user)
+		if err != nil {
+			return err
 		}
-		return 0, err
-	}
 
-	if err := tx.Commit(ctx); err != nil {
-		return 0, err
-	}
+		return nil
+	})
 
-	return userId, nil
+	return userId, err
 }
 
 func (u *UserUsecases) UpdateInfo(ctx context.Context, updateUserInfoDTO dto.UpdateUserInfo) error {

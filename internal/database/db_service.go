@@ -25,15 +25,27 @@ func NewService(client *Client) Service {
 	}
 }
 
-func (s *Service) BeginTx(ctx context.Context) (Transaction, error) {
+func (s *Service) BeginTx(ctx context.Context, op func(ctx context.Context, tx Transaction) error) error {
 	conn, err := s.client.pool.Begin(ctx)
 	if err != nil {
-		return Transaction{}, errors.New(errors.DatabaseError, "cannot open transaction").SetInternal(err)
+		return errors.New(errors.DatabaseError, "cannot open transaction").SetInternal(err)
 	}
 
-	transaction := newTransaction(conn)
+	tx := newTransaction(conn)
 
-	return transaction, nil
+	err = op(ctx, tx)
+	if err != nil {
+		if err := tx.rollback(ctx); err != nil {
+			return err
+		}
+		return err
+	}
+
+	if err := tx.commit(ctx); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // Transaction
@@ -52,7 +64,7 @@ func newTransaction(conn pgx.Tx) Transaction {
 	}
 }
 
-func (t *Transaction) Commit(ctx context.Context) error {
+func (t *Transaction) commit(ctx context.Context) error {
 	err := t.conn.Commit(ctx)
 	if err != nil {
 		return errors.New(errors.DatabaseError, "cannot commit transaction").SetInternal(err)
@@ -61,7 +73,7 @@ func (t *Transaction) Commit(ctx context.Context) error {
 	return nil
 }
 
-func (t *Transaction) Rollback(ctx context.Context) error {
+func (t *Transaction) rollback(ctx context.Context) error {
 	err := t.conn.Rollback(ctx)
 	if err != nil {
 		return errors.New(errors.DatabaseError, "cannot rollback transaction").SetInternal(err)
