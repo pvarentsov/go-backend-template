@@ -19,7 +19,7 @@ func (u *UserUsecases) Add(ctx context.Context, addUserDTO dto.AddUser) (int64, 
 	}
 
 	// Transaction demonstration
-	
+
 	tx, err := u.db.BeginTx(ctx)
 	if err != nil {
 		return 0, err
