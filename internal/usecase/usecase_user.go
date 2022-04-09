@@ -21,7 +21,6 @@ func (u *UserUsecases) Add(ctx context.Context, addUserDTO dto.AddUser) (int64, 
 	}
 
 	// Transaction demonstration
-
 	err = u.db.BeginTx(ctx, func(ctx context.Context) error {
 		userId, err = u.db.UserRepo.Add(ctx, user)
 		if err != nil {
