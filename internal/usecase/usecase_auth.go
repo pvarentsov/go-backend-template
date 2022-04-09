@@ -20,7 +20,6 @@ func (u *AuthUsecases) Login(ctx context.Context, loginUserDTO dto.LoginUser) (d
 		return dto.LoggedUser{}, errors.New(errors.WrongCredentialsError, "").
 			SetInternal(err)
 	}
-
 	if !user.ComparePassword(loginUserDTO.Password) {
 		return dto.LoggedUser{}, errors.New(errors.WrongCredentialsError, "")
 	}

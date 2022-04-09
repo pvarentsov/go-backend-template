@@ -43,7 +43,6 @@ func (u *UserUsecases) UpdateInfo(ctx context.Context, updateUserInfoDTO dto.Upd
 	if err != nil {
 		return err
 	}
-
 	err = user.UpdateInfo(
 		updateUserInfoDTO.FirstName,
 		updateUserInfoDTO.LastName,
