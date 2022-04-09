@@ -53,7 +53,6 @@ func (u *UserUsecases) UpdateInfo(ctx context.Context, updateUserInfoDTO dto.Upd
 	if err != nil {
 		return err
 	}
-
 	_, err = u.db.UserRepo.Update(ctx, user)
 
 	return err
@@ -64,11 +63,9 @@ func (u *UserUsecases) ChangePassword(ctx context.Context, changeUserPasswordDTO
 	if err != nil {
 		return err
 	}
-
 	if err = user.ChangePassword(changeUserPasswordDTO.Password); err != nil {
 		return err
 	}
-
 	_, err = u.db.UserRepo.Update(ctx, user)
 
 	return err

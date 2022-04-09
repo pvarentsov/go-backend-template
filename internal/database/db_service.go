@@ -50,7 +50,6 @@ func (s *Service) beginTx(ctx context.Context, do func(ctx context.Context) erro
 		}
 		return err
 	}
-
 	if err := tx.commit(txCtx); err != nil {
 		return err
 	}
