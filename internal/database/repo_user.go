@@ -20,16 +20,14 @@ type UserRepo interface {
 	GetByEmail(ctx context.Context, email string) (model.User, error)
 }
 
-func newUserRepo(conn connection, qb goqu.DialectWrapper) UserRepo {
+func newUserRepo(pool connection, qb goqu.DialectWrapper) UserRepo {
 	return &userRepo{
-		conn: conn,
-		qb:   qb,
+		repo: repo{pool: pool, qb: qb},
 	}
 }
 
 type userRepo struct {
-	conn connection
-	qb   goqu.DialectWrapper
+	repo
 }
 
 func (r *userRepo) Add(ctx context.Context, user model.User) (int64, error) {
@@ -48,7 +46,7 @@ func (r *userRepo) Add(ctx context.Context, user model.User) (int64, error) {
 		return 0, errors.New(errors.DatabaseError, "").SetInternal(err)
 	}
 
-	row := r.conn.QueryRow(ctx, sql)
+	row := r.conn(ctx).QueryRow(ctx, sql)
 
 	if err := row.Scan(&user.Id); err != nil {
 		return 0, parseAddUserError(&user, err)
@@ -74,7 +72,7 @@ func (r *userRepo) Update(ctx context.Context, user model.User) (int64, error) {
 		return 0, errors.New(errors.DatabaseError, "").SetInternal(err)
 	}
 
-	row := r.conn.QueryRow(ctx, sql)
+	row := r.conn(ctx).QueryRow(ctx, sql)
 
 	if err := row.Scan(&user.Id); err != nil {
 		return 0, parseUpdateUserError(&user, err)
@@ -99,7 +97,7 @@ func (r *userRepo) GetById(ctx context.Context, userId int64) (model.User, error
 		return model.User{}, errors.New(errors.DatabaseError, "").SetInternal(err)
 	}
 
-	row := r.conn.QueryRow(ctx, sql)
+	row := r.conn(ctx).QueryRow(ctx, sql)
 
 	user := model.User{Id: userId}
 
@@ -109,7 +107,6 @@ func (r *userRepo) GetById(ctx context.Context, userId int64) (model.User, error
 		&user.Email,
 		&user.Password,
 	)
-
 	if err != nil {
 		return model.User{}, parseGetUserByIdError(userId, err)
 	}
@@ -133,7 +130,7 @@ func (r *userRepo) GetByEmail(ctx context.Context, email string) (model.User, er
 		return model.User{}, errors.New(errors.DatabaseError, "").SetInternal(err)
 	}
 
-	row := r.conn.QueryRow(ctx, sql)
+	row := r.conn(ctx).QueryRow(ctx, sql)
 
 	user := model.User{Email: email}
 
@@ -143,7 +140,6 @@ func (r *userRepo) GetByEmail(ctx context.Context, email string) (model.User, er
 		&user.LastName,
 		&user.Password,
 	)
-
 	if err != nil {
 		return model.User{}, parseGetUserByEmailError(email, err)
 	}

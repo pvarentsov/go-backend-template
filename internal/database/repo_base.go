@@ -8,6 +8,22 @@ import (
 	"github.com/jackc/pgx/v4"
 )
 
+// Repo
+
+type repo struct {
+	pool connection
+	qb   goqu.DialectWrapper
+}
+
+func (r *userRepo) conn(ctx context.Context) connection {
+	tx, ok := inTx(ctx)
+	if ok {
+		return tx.conn
+	}
+
+	return r.pool
+}
+
 // Repos
 
 type Repos struct {

@@ -25,23 +25,33 @@ func NewService(client *Client) Service {
 	}
 }
 
-func (s *Service) BeginTx(ctx context.Context, op func(ctx context.Context, tx Transaction) error) error {
+func (s *Service) BeginTx(ctx context.Context, do func(ctx context.Context) error) error {
+	_, ok := inTx(ctx)
+	if ok {
+		return do(ctx)
+	}
+
+	return s.beginTx(ctx, do)
+}
+
+func (s *Service) beginTx(ctx context.Context, do func(ctx context.Context) error) error {
 	conn, err := s.client.pool.Begin(ctx)
 	if err != nil {
 		return errors.New(errors.DatabaseError, "cannot open transaction").SetInternal(err)
 	}
 
 	tx := newTransaction(conn)
+	txCtx := withTx(ctx, tx)
 
-	err = op(ctx, tx)
+	err = do(txCtx)
 	if err != nil {
-		if err := tx.rollback(ctx); err != nil {
+		if err := tx.rollback(txCtx); err != nil {
 			return err
 		}
 		return err
 	}
 
-	if err := tx.commit(ctx); err != nil {
+	if err := tx.commit(txCtx); err != nil {
 		return err
 	}
 
@@ -80,4 +90,25 @@ func (t *Transaction) rollback(ctx context.Context) error {
 	}
 
 	return nil
+}
+
+// Transaction Context
+
+type txKey = string
+
+const (
+	key txKey = "tx"
+)
+
+func withTx(ctx context.Context, tx Transaction) context.Context {
+	return context.WithValue(ctx, key, tx)
+}
+
+func inTx(ctx context.Context) (Transaction, bool) {
+	tx, ok := ctx.Value(key).(Transaction)
+	if ok {
+		return tx, true
+	}
+
+	return Transaction{}, false
 }

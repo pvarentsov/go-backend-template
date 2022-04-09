@@ -22,19 +22,17 @@ func (u *UserUsecases) Add(ctx context.Context, addUserDTO dto.AddUser) (int64, 
 
 	// Transaction demonstration
 
-	err = u.db.BeginTx(ctx, func(ctx context.Context, tx database.Transaction) error {
-		userId, err = tx.UserRepo.Add(ctx, user)
+	err = u.db.BeginTx(ctx, func(ctx context.Context) error {
+		userId, err = u.db.UserRepo.Add(ctx, user)
 		if err != nil {
 			return err
 		}
-
 		user.Id = userId
 
-		userId, err = tx.UserRepo.Update(ctx, user)
+		userId, err = u.db.UserRepo.Update(ctx, user)
 		if err != nil {
 			return err
 		}
-
 		return nil
 	})
 
