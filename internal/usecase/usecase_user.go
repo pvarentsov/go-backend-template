@@ -12,9 +12,7 @@ type UserUsecases struct {
 	config Config
 }
 
-func (u *UserUsecases) Add(ctx context.Context, in dto.UserAdd) (int64, error) {
-	var userId int64
-
+func (u *UserUsecases) Add(ctx context.Context, in dto.UserAdd) (userId int64, err error) {
 	user, err := in.MapTo()
 	if err != nil {
 		return 0, err
