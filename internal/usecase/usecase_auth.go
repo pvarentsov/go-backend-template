@@ -63,6 +63,6 @@ func (u *AuthUsecases) generateAccessToken(userId int64) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	
+
 	return token, nil
 }
