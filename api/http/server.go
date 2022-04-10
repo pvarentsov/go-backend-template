@@ -2,8 +2,10 @@ package http
 
 import (
 	"fmt"
-	"github.com/gin-gonic/gin"
+
 	"go-backend-template/internal/usecase"
+
+	"github.com/gin-gonic/gin"
 )
 
 type Server struct {

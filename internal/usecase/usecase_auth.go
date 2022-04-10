@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"go-backend-template/internal/database"
-	"go-backend-template/internal/dto"
+	"go-backend-template/internal/usecase/dto"
 	"go-backend-template/internal/util/crypto"
 	"go-backend-template/internal/util/errors"
 )
@@ -14,25 +14,19 @@ type AuthUsecases struct {
 	config Config
 }
 
-func (u *AuthUsecases) Login(ctx context.Context, loginUserDTO dto.LoginUser) (dto.LoggedUser, error) {
-	user, err := u.db.UserRepo.GetByEmail(ctx, loginUserDTO.Email)
+func (u *AuthUsecases) Login(ctx context.Context, in dto.UserLogin) (out dto.UserLoggedInfo, err error) {
+	user, err := u.db.UserRepo.GetByEmail(ctx, in.Email)
 	if err != nil {
-		return dto.LoggedUser{}, errors.New(errors.WrongCredentialsError, "").
-			SetInternal(err)
+		return out, errors.Wrap(errors.WrongCredentialsError, err, "")
 	}
-	if !user.ComparePassword(loginUserDTO.Password) {
-		return dto.LoggedUser{}, errors.New(errors.WrongCredentialsError, "")
+	if !user.ComparePassword(in.Password) {
+		return out, errors.New(errors.WrongCredentialsError, "")
 	}
-
 	token, err := u.generateAccessToken(user.Id)
 	if err != nil {
-		return dto.LoggedUser{}, err
+		return out, err
 	}
-
-	loggedUserDTO := dto.LoggedUser{}
-	loggedUserDTO.MapFrom(user, token)
-
-	return loggedUserDTO, nil
+	return out.MapFrom(user, token), nil
 }
 
 func (u *AuthUsecases) VerifyAccessToken(accessToken string) (int64, error) {
@@ -68,6 +62,5 @@ func (u *AuthUsecases) generateAccessToken(userId int64) (string, error) {
 	if err != nil {
 		return "", err
 	}
-
 	return token, nil
 }

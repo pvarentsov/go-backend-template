@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"go-backend-template/internal/database"
-	"go-backend-template/internal/dto"
+	"go-backend-template/internal/usecase/dto"
 )
 
 type UserUsecases struct {
@@ -12,10 +12,10 @@ type UserUsecases struct {
 	config Config
 }
 
-func (u *UserUsecases) Add(ctx context.Context, addUserDTO dto.AddUser) (int64, error) {
+func (u *UserUsecases) Add(ctx context.Context, in dto.UserAdd) (int64, error) {
 	var userId int64
 
-	user, err := addUserDTO.MapTo()
+	user, err := in.MapTo()
 	if err != nil {
 		return 0, err
 	}
@@ -38,16 +38,12 @@ func (u *UserUsecases) Add(ctx context.Context, addUserDTO dto.AddUser) (int64, 
 	return userId, err
 }
 
-func (u *UserUsecases) UpdateInfo(ctx context.Context, updateUserInfoDTO dto.UpdateUserInfo) error {
-	user, err := u.db.UserRepo.GetById(ctx, updateUserInfoDTO.Id)
+func (u *UserUsecases) UpdateInfo(ctx context.Context, in dto.UserUpdateInfo) error {
+	user, err := u.db.UserRepo.GetById(ctx, in.Id)
 	if err != nil {
 		return err
 	}
-	err = user.UpdateInfo(
-		updateUserInfoDTO.FirstName,
-		updateUserInfoDTO.LastName,
-		updateUserInfoDTO.Email,
-	)
+	err = user.UpdateInfo(in.FirstName, in.LastName, in.Email)
 	if err != nil {
 		return err
 	}
@@ -56,12 +52,12 @@ func (u *UserUsecases) UpdateInfo(ctx context.Context, updateUserInfoDTO dto.Upd
 	return err
 }
 
-func (u *UserUsecases) ChangePassword(ctx context.Context, changeUserPasswordDTO dto.ChangeUserPassword) error {
-	user, err := u.db.UserRepo.GetById(ctx, changeUserPasswordDTO.Id)
+func (u *UserUsecases) ChangePassword(ctx context.Context, in dto.UserChangePassword) error {
+	user, err := u.db.UserRepo.GetById(ctx, in.Id)
 	if err != nil {
 		return err
 	}
-	if err = user.ChangePassword(changeUserPasswordDTO.Password); err != nil {
+	if err = user.ChangePassword(in.Password); err != nil {
 		return err
 	}
 	_, err = u.db.UserRepo.Update(ctx, user)
@@ -69,14 +65,11 @@ func (u *UserUsecases) ChangePassword(ctx context.Context, changeUserPasswordDTO
 	return err
 }
 
-func (u *UserUsecases) GetById(ctx context.Context, userId int64) (dto.User, error) {
+func (u *UserUsecases) GetById(ctx context.Context, userId int64) (out dto.User, err error) {
 	user, err := u.db.UserRepo.GetById(ctx, userId)
 	if err != nil {
-		return dto.User{}, err
+		return out, err
 	}
 
-	userDTO := dto.User{}
-	userDTO.MapFrom(user)
-
-	return userDTO, nil
+	return out.MapFrom(user), nil
 }

@@ -1,8 +1,9 @@
 package http
 
 import (
-	"go-backend-template/internal/util/errors"
 	"net/http"
+
+	"go-backend-template/internal/util/errors"
 )
 
 func parseError(err error) (int, string) {
@@ -10,7 +11,7 @@ func parseError(err error) (int, string) {
 		return http.StatusInternalServerError, "internal error"
 	}
 
-	wrappedErr := errors.Wrap(err)
+	wrappedErr := errors.Wrap(errors.InternalError, err, "internal error")
 
 	switch wrappedErr.Status() {
 	case errors.BadRequestError:

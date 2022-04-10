@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 
-	"go-backend-template/internal/dto"
+	"go-backend-template/internal/usecase/dto"
 	"go-backend-template/internal/util/contexts"
 	"go-backend-template/internal/util/crypto"
 	"go-backend-template/internal/util/errors"
@@ -40,7 +40,7 @@ func (r *router) init() {
 // Auth methods
 
 func (r *router) login(c *gin.Context) {
-	var loginUserDTO dto.LoginUser
+	var loginUserDTO dto.UserLogin
 
 	if err := bindBody(&loginUserDTO, c); err != nil {
 		errorResponse(err, nil).reply(c)
@@ -71,7 +71,7 @@ func (r *router) authenticate(c *gin.Context) {
 // User methods
 
 func (r *router) addUser(c *gin.Context) {
-	var addUserDTO dto.AddUser
+	var addUserDTO dto.UserAdd
 
 	if err := bindBody(&addUserDTO, c); err != nil {
 		errorResponse(err, nil).reply(c)
@@ -88,7 +88,7 @@ func (r *router) addUser(c *gin.Context) {
 }
 
 func (r *router) updateMyInfo(c *gin.Context) {
-	var updateUserDTO dto.UpdateUserInfo
+	var updateUserDTO dto.UserUpdateInfo
 
 	reqInfo := getReqInfo(c)
 	updateUserDTO.Id = reqInfo.UserId
@@ -108,7 +108,7 @@ func (r *router) updateMyInfo(c *gin.Context) {
 }
 
 func (r *router) changeMyPassword(c *gin.Context) {
-	var changeUserPasswordDTO dto.ChangeUserPassword
+	var changeUserPasswordDTO dto.UserChangePassword
 
 	reqInfo := getReqInfo(c)
 	changeUserPasswordDTO.Id = reqInfo.UserId

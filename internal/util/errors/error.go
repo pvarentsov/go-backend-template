@@ -51,12 +51,22 @@ func Errorf(status Status, message string, a ...interface{}) Error {
 	return err
 }
 
-func Wrap(err error) Error {
+func Wrap(status Status, err error, message string) Error {
 	coreErr, isCoreErr := err.(Error)
 
 	if isCoreErr {
 		return coreErr
 	}
 
-	return New(InternalError, "").SetInternal(err)
+	return New(status, message).SetInternal(err)
+}
+
+func Wrapf(status Status, err error, message string, a ...interface{}) Error {
+	coreErr, isCoreErr := err.(Error)
+
+	if isCoreErr {
+		return coreErr
+	}
+
+	return Errorf(status, message, a...).SetInternal(err)
 }

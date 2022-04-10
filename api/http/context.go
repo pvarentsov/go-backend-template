@@ -2,8 +2,10 @@ package http
 
 import (
 	"context"
-	"github.com/gin-gonic/gin"
+
 	"go-backend-template/internal/util/contexts"
+
+	"github.com/gin-gonic/gin"
 )
 
 type reqInfoKeyType = string
