@@ -31,9 +31,7 @@ type Repos struct {
 }
 
 func newRepos(conn connection, qb goqu.DialectWrapper) Repos {
-	return Repos{
-		User: newUserRepo(conn, qb),
-	}
+	return Repos{User: newUserRepo(conn, qb)}
 }
 
 // Connection

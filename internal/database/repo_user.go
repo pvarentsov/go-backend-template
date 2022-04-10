@@ -21,9 +21,7 @@ type UserRepo interface {
 }
 
 func newUserRepo(pool connection, qb goqu.DialectWrapper) UserRepo {
-	return &userRepo{
-		repo: repo{pool: pool, qb: qb},
-	}
+	return &userRepo{repo: repo{pool: pool, qb: qb}}
 }
 
 type userRepo struct {

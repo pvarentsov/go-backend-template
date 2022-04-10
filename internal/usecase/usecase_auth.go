@@ -26,6 +26,7 @@ func (u *AuthUsecases) Login(ctx context.Context, in dto.UserLogin) (out dto.Use
 	if err != nil {
 		return out, err
 	}
+
 	return out.MapFrom(user, token), nil
 }
 
@@ -62,5 +63,6 @@ func (u *AuthUsecases) generateAccessToken(userId int64) (string, error) {
 	if err != nil {
 		return "", err
 	}
+	
 	return token, nil
 }
