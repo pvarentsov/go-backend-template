@@ -16,7 +16,7 @@ type repo struct {
 }
 
 func (r *userRepo) conn(ctx context.Context) connection {
-	tx, ok := inTx(ctx)
+	tx, ok := hasTx(ctx)
 	if ok {
 		return tx.conn
 	}

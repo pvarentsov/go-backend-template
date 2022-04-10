@@ -26,7 +26,7 @@ func NewService(client *Client) Service {
 }
 
 func (s *Service) BeginTx(ctx context.Context, do func(ctx context.Context) error) error {
-	_, ok := inTx(ctx)
+	_, ok := hasTx(ctx)
 	if ok {
 		return do(ctx)
 	}
@@ -103,7 +103,7 @@ func withTx(ctx context.Context, tx Transaction) context.Context {
 	return context.WithValue(ctx, key, tx)
 }
 
-func inTx(ctx context.Context) (Transaction, bool) {
+func hasTx(ctx context.Context) (Transaction, bool) {
 	tx, ok := ctx.Value(key).(Transaction)
 	if ok {
 		return tx, true
