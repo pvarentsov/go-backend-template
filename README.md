@@ -16,19 +16,15 @@
 <tbody>
 
 <tr>
-<td align="center">internal/util</td>
-<td align="center">crypto (<a href="https://pkg.go.dev/golang.org/x/crypto/bcrypt">bcrypt</a> + <a href="https://github.com/golang-jwt/jwt">jwt</a> + <a href="https://github.com/gofrs/uuid">uuid</a>);<br>contexts; errors</td>
-<td>
-    contexts: <a href="./internal/util/contexts/context.go">Context</a>;
-    crypto: <a href="./internal/util/crypto/password.go">Password</a>, <a href="./internal/util/crypto/token.go">Token</a>;
-    errors: <a href="./internal/util/errors/error.go">Error</a>, <a href="./internal/util/errors/status.go">Status</a>
-</td>
+<td align="center">internal</td>
+<td align="center">model (<a href="https://github.com/go-ozzo/ozzo-validation">ozzo-validation</a>)</td>
+<td align="center"><a href="./internal/model/user.go">User</a></td>
 </tr>
 
 <tr>
 <td align="center">internal</td>
 <td align="center">database (<a href="https://github.com/jackc/pgx">pgx</a> + <a href="https://github.com/doug-martin/goqu">goqu</a>)</td>
-<td>
+<td align="center">
     <a href="./internal/database/db_client.go">Client</a>, 
     <a href="./internal/database/db_service.go">Service</a>,  
     <a href="./internal/database/repo_user.go">UserRepo</a>
@@ -37,35 +33,27 @@
 
 <tr>
 <td align="center">internal</td>
-<td align="center">model (<a href="https://github.com/go-ozzo/ozzo-validation">ozzo-validation</a>)</td>
-<td><a href="./internal/model/user.go">User</a></td>
-</tr>
-
-<tr>
-<td align="center">internal</td>
-<td align="center">dto</td>
-<td>
-    <a href="./internal/dto/add_user.go">AddUser</a>,
-    <a href="./internal/dto/user.go">User</a>,
-    <a href="./internal/dto/login_user.go">LoginUser</a>,
-    <a href="./internal/dto/logged_user.go">LoggedUser</a>,
-    <a href="./internal/dto/">...</a>
-</td>
-</tr>
-
-<tr>
-<td align="center">internal</td>
 <td align="center">usecase</td>
-<td>
+<td align="center">
     <a href="./internal/usecase/usecase_auth.go">Auth</a>, 
     <a href="./internal/usecase/usecase_user.go">User</a>
 </td>
 </tr>
 
 <tr>
+<td align="center">internal/util</td>
+<td align="center">crypto (<a href="https://pkg.go.dev/golang.org/x/crypto/bcrypt">bcrypt</a> + <a href="https://github.com/golang-jwt/jwt">jwt</a> + <a href="https://github.com/gofrs/uuid">uuid</a>);<br>contexts; errors</td>
+<td align="center">
+    crypto: <a href="./internal/util/crypto/password.go">Password</a>, <a href="./internal/util/crypto/token.go">Token</a>;<br>
+    contexts: <a href="./internal/util/contexts/context.go">Context</a>;
+    errors: <a href="./internal/util/errors/error.go">Error</a>, <a href="./internal/util/errors/status.go">Status</a>
+</td>
+</tr>
+
+<tr>
 <td align="center">config</td>
 <td align="center">config (<a href="https://github.com/kelseyhightower/envconfig">envconfig</a> + <a href="https://github.com/subosito/gotenv">gotenv</a>)</td>
-<td>
+<td align="center">
     <a href="./config/config.go">Config</a>,
     <a href="./config/env">ENV files</a>
 </td>
@@ -74,7 +62,7 @@
 <tr>
 <td align="center">api</td>
 <td align="center">http (<a href="https://github.com/gin-gonic/gin">gin</a>)</td>
-<td>
+<td align="center">
     <a href="./api/http/server.go">Server</a>, 
     <a href="./api/http/router.go">Router</a>
 </td>
@@ -83,7 +71,7 @@
 <tr>
 <td align="center">api</td>
 <td align="center">cli (<a href="https://github.com/alecthomas/kong">kong</a>)</td>
-<td>
+<td align="center">
     <a href="./api/cli/cli.go">Parser</a>
 </td>
 </tr>
@@ -91,7 +79,7 @@
 <tr>
 <td align="center">cmd</td>
 <td align="center">http/main</td>
-<td><a href="./cmd/http/main.go">Main file</a></td>
+<td align="center"><a href="./cmd/http/main.go">Main file</a></td>
 </tr>
 
 </tbody>
