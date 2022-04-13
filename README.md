@@ -19,7 +19,7 @@
 <td align="center">internal/util</td>
 <td align="center">crypto (<a href="https://pkg.go.dev/golang.org/x/crypto/bcrypt">bcrypt</a> + <a href="https://github.com/golang-jwt/jwt">jwt</a> + <a href="https://github.com/gofrs/uuid">uuid</a>);<br>contexts; errors</td>
 <td align="center">
-    crypto: <a href="./internal/util/crypto/password.go">Password</a>, <a href="./internal/util/crypto/token.go">Token</a>;<br>
+    crypto: <a href="./internal/util/crypto/crypto.go">Password</a>;
     contexts: <a href="./internal/util/contexts/context.go">Context</a>;
     errors: <a href="./internal/util/errors/error.go">Error</a>, <a href="./internal/util/errors/status.go">Status</a>
 </td>
