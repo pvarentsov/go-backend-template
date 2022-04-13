@@ -6,7 +6,6 @@ import (
 
 	"go-backend-template/internal/usecase/dto"
 	"go-backend-template/internal/util/contexts"
-	"go-backend-template/internal/util/crypto"
 	"go-backend-template/internal/util/errors"
 
 	"github.com/gin-gonic/gin"
@@ -157,7 +156,7 @@ func (r *router) trace() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		traceId := c.Request.Header.Get("Trace-Id")
 		if traceId == "" {
-			traceId, _ = crypto.GenerateUUID()
+			traceId, _ = r.server.crypto.GenerateUUID()
 		}
 
 		setTraceId(c, traceId)

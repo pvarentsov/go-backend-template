@@ -15,6 +15,14 @@ type UserRepo struct {
 	mock.Mock
 }
 
+type UserRepo_Expecter struct {
+	mock *mock.Mock
+}
+
+func (_m *UserRepo) EXPECT() *UserRepo_Expecter {
+	return &UserRepo_Expecter{mock: &_m.Mock}
+}
+
 // Add provides a mock function with given fields: ctx, user
 func (_m *UserRepo) Add(ctx context.Context, user model.User) (int64, error) {
 	ret := _m.Called(ctx, user)
@@ -34,6 +42,30 @@ func (_m *UserRepo) Add(ctx context.Context, user model.User) (int64, error) {
 	}
 
 	return r0, r1
+}
+
+// UserRepo_Add_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'Add'
+type UserRepo_Add_Call struct {
+	*mock.Call
+}
+
+// Add is a helper method to define mock.On call
+//  - ctx context.Context
+//  - user model.User
+func (_e *UserRepo_Expecter) Add(ctx interface{}, user interface{}) *UserRepo_Add_Call {
+	return &UserRepo_Add_Call{Call: _e.mock.On("Add", ctx, user)}
+}
+
+func (_c *UserRepo_Add_Call) Run(run func(ctx context.Context, user model.User)) *UserRepo_Add_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(context.Context), args[1].(model.User))
+	})
+	return _c
+}
+
+func (_c *UserRepo_Add_Call) Return(_a0 int64, _a1 error) *UserRepo_Add_Call {
+	_c.Call.Return(_a0, _a1)
+	return _c
 }
 
 // GetByEmail provides a mock function with given fields: ctx, email
@@ -57,6 +89,30 @@ func (_m *UserRepo) GetByEmail(ctx context.Context, email string) (model.User, e
 	return r0, r1
 }
 
+// UserRepo_GetByEmail_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetByEmail'
+type UserRepo_GetByEmail_Call struct {
+	*mock.Call
+}
+
+// GetByEmail is a helper method to define mock.On call
+//  - ctx context.Context
+//  - email string
+func (_e *UserRepo_Expecter) GetByEmail(ctx interface{}, email interface{}) *UserRepo_GetByEmail_Call {
+	return &UserRepo_GetByEmail_Call{Call: _e.mock.On("GetByEmail", ctx, email)}
+}
+
+func (_c *UserRepo_GetByEmail_Call) Run(run func(ctx context.Context, email string)) *UserRepo_GetByEmail_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(context.Context), args[1].(string))
+	})
+	return _c
+}
+
+func (_c *UserRepo_GetByEmail_Call) Return(_a0 model.User, _a1 error) *UserRepo_GetByEmail_Call {
+	_c.Call.Return(_a0, _a1)
+	return _c
+}
+
 // GetById provides a mock function with given fields: ctx, userId
 func (_m *UserRepo) GetById(ctx context.Context, userId int64) (model.User, error) {
 	ret := _m.Called(ctx, userId)
@@ -78,6 +134,30 @@ func (_m *UserRepo) GetById(ctx context.Context, userId int64) (model.User, erro
 	return r0, r1
 }
 
+// UserRepo_GetById_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetById'
+type UserRepo_GetById_Call struct {
+	*mock.Call
+}
+
+// GetById is a helper method to define mock.On call
+//  - ctx context.Context
+//  - userId int64
+func (_e *UserRepo_Expecter) GetById(ctx interface{}, userId interface{}) *UserRepo_GetById_Call {
+	return &UserRepo_GetById_Call{Call: _e.mock.On("GetById", ctx, userId)}
+}
+
+func (_c *UserRepo_GetById_Call) Run(run func(ctx context.Context, userId int64)) *UserRepo_GetById_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(context.Context), args[1].(int64))
+	})
+	return _c
+}
+
+func (_c *UserRepo_GetById_Call) Return(_a0 model.User, _a1 error) *UserRepo_GetById_Call {
+	_c.Call.Return(_a0, _a1)
+	return _c
+}
+
 // Update provides a mock function with given fields: ctx, user
 func (_m *UserRepo) Update(ctx context.Context, user model.User) (int64, error) {
 	ret := _m.Called(ctx, user)
@@ -97,4 +177,28 @@ func (_m *UserRepo) Update(ctx context.Context, user model.User) (int64, error) 
 	}
 
 	return r0, r1
+}
+
+// UserRepo_Update_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'Update'
+type UserRepo_Update_Call struct {
+	*mock.Call
+}
+
+// Update is a helper method to define mock.On call
+//  - ctx context.Context
+//  - user model.User
+func (_e *UserRepo_Expecter) Update(ctx interface{}, user interface{}) *UserRepo_Update_Call {
+	return &UserRepo_Update_Call{Call: _e.mock.On("Update", ctx, user)}
+}
+
+func (_c *UserRepo_Update_Call) Run(run func(ctx context.Context, user model.User)) *UserRepo_Update_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(context.Context), args[1].(model.User))
+	})
+	return _c
+}
+
+func (_c *UserRepo_Update_Call) Return(_a0 int64, _a1 error) *UserRepo_Update_Call {
+	_c.Call.Return(_a0, _a1)
+	return _c
 }

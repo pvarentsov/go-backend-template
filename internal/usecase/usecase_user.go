@@ -5,6 +5,7 @@ import (
 
 	"go-backend-template/internal/database"
 	"go-backend-template/internal/usecase/dto"
+	"go-backend-template/internal/util/crypto"
 )
 
 type UserUsecases interface {
@@ -16,12 +17,16 @@ type UserUsecases interface {
 
 type userUsecases struct {
 	db     database.Service
+	crypto crypto.Crypto
 	config Config
 }
 
 func (u *userUsecases) Add(ctx context.Context, in dto.UserAdd) (userId int64, err error) {
 	user, err := in.MapTo()
 	if err != nil {
+		return 0, err
+	}
+	if err := user.HashPassword(u.crypto); err != nil {
 		return 0, err
 	}
 
@@ -62,7 +67,7 @@ func (u *userUsecases) ChangePassword(ctx context.Context, in dto.UserChangePass
 	if err != nil {
 		return err
 	}
-	if err = user.ChangePassword(in.Password); err != nil {
+	if err = user.ChangePassword(in.Password, u.crypto); err != nil {
 		return err
 	}
 	_, err = u.db.UserRepo().Update(ctx, user)

@@ -14,6 +14,10 @@ type Service struct {
 	userRepo *UserRepo
 }
 
+func NewService(userRepo *UserRepo) *Service {
+	return &Service{userRepo: userRepo}
+}
+
 func (s *Service) UserRepo() database.UserRepo {
 	return s.userRepo
 }

@@ -17,6 +17,7 @@ type AuthUsecases interface {
 
 type authUsecases struct {
 	db     database.Service
+	crypto crypto.Crypto
 	config Config
 }
 
@@ -25,7 +26,7 @@ func (u *authUsecases) Login(ctx context.Context, in dto.UserLogin) (out dto.Use
 	if err != nil {
 		return out, errors.Wrap(errors.WrongCredentialsError, err, "")
 	}
-	if !user.ComparePassword(in.Password) {
+	if !user.ComparePassword(in.Password, u.crypto) {
 		return out, errors.New(errors.WrongCredentialsError, "")
 	}
 	token, err := u.generateAccessToken(user.Id)
@@ -37,7 +38,7 @@ func (u *authUsecases) Login(ctx context.Context, in dto.UserLogin) (out dto.Use
 }
 
 func (u *authUsecases) VerifyAccessToken(accessToken string) (int64, error) {
-	payload, err := crypto.ParseAndValidateJWT(accessToken, u.config.AccessTokenSecret())
+	payload, err := u.crypto.ParseAndValidateJWT(accessToken, u.config.AccessTokenSecret())
 	if err != nil {
 		return 0, errors.New(errors.UnauthorizedError, "")
 	}
@@ -48,7 +49,7 @@ func (u *authUsecases) VerifyAccessToken(accessToken string) (int64, error) {
 }
 
 func (u *authUsecases) ParseAccessToken(accessToken string) (int64, error) {
-	payload, err := crypto.ParseJWT(accessToken, u.config.AccessTokenSecret())
+	payload, err := u.crypto.ParseJWT(accessToken, u.config.AccessTokenSecret())
 	if err != nil {
 		return 0, errors.New(errors.UnauthorizedError, "")
 	}
@@ -61,7 +62,7 @@ func (u *authUsecases) ParseAccessToken(accessToken string) (int64, error) {
 func (u *authUsecases) generateAccessToken(userId int64) (string, error) {
 	payload := map[string]interface{}{"userId": userId}
 
-	token, err := crypto.GenerateJWT(
+	token, err := u.crypto.GenerateJWT(
 		payload,
 		u.config.AccessTokenSecret(),
 		u.config.AccessTokenExpiresDate(),

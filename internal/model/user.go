@@ -26,9 +26,6 @@ func NewUser(firstName, lastName, email, password string) (User, error) {
 	if err := user.Validate(); err != nil {
 		return User{}, err
 	}
-	if err := user.HashPassword(); err != nil {
-		return User{}, err
-	}
 
 	return user, nil
 }
@@ -47,10 +44,10 @@ func (user *User) UpdateInfo(firstName, lastName, email string) error {
 	return user.Validate()
 }
 
-func (user *User) ChangePassword(newPassword string) error {
+func (user *User) ChangePassword(newPassword string, crypto crypto.Crypto) error {
 	user.Password = newPassword
 
-	if err := user.HashPassword(); err != nil {
+	if err := user.HashPassword(crypto); err != nil {
 		return err
 	}
 
@@ -71,11 +68,11 @@ func (user *User) Validate() error {
 	return nil
 }
 
-func (user *User) ComparePassword(password string) bool {
+func (user *User) ComparePassword(password string, crypto crypto.Crypto) bool {
 	return crypto.CompareHashAndPassword(user.Password, password)
 }
 
-func (user *User) HashPassword() error {
+func (user *User) HashPassword(crypto crypto.Crypto) error {
 	hash, err := crypto.HashPassword(user.Password)
 	if err != nil {
 		return err

@@ -3,13 +3,46 @@ package crypto
 import (
 	"time"
 
-	"go-backend-template/internal/util/errors"
+	"golang.org/x/crypto/bcrypt"
 
 	"github.com/gofrs/uuid"
 	"github.com/golang-jwt/jwt"
+
+	"go-backend-template/internal/util/errors"
 )
 
-func GenerateJWT(payload map[string]interface{}, secret string, exp time.Time) (string, error) {
+type Crypto interface {
+	HashPassword(password string) (string, error)
+	CompareHashAndPassword(hash string, password string) bool
+
+	GenerateJWT(payload map[string]interface{}, secret string, exp time.Time) (string, error)
+	ParseAndValidateJWT(token string, secret string) (map[string]interface{}, error)
+	ParseJWT(token string, secret string) (map[string]interface{}, error)
+
+	GenerateUUID() (string, error)
+}
+
+type crypto struct{}
+
+func NewCrypto() Crypto {
+	return &crypto{}
+}
+
+func (*crypto) HashPassword(password string) (string, error) {
+	bytes, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+	if err != nil {
+		return "", err
+	}
+
+	return string(bytes), nil
+}
+
+func (*crypto) CompareHashAndPassword(hash string, password string) bool {
+	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
+	return err == nil
+}
+
+func (*crypto) GenerateJWT(payload map[string]interface{}, secret string, exp time.Time) (string, error) {
 	claims := make(jwt.MapClaims)
 	claims["exp"] = exp.Unix()
 
@@ -28,7 +61,7 @@ func GenerateJWT(payload map[string]interface{}, secret string, exp time.Time) (
 	return token, nil
 }
 
-func ParseAndValidateJWT(token string, secret string) (map[string]interface{}, error) {
+func (*crypto) ParseAndValidateJWT(token string, secret string) (map[string]interface{}, error) {
 	parsedToken, err := jwt.Parse(token, func(token *jwt.Token) (interface{}, error) {
 		return []byte(secret), nil
 	})
@@ -53,7 +86,7 @@ func ParseAndValidateJWT(token string, secret string) (map[string]interface{}, e
 	return payload, nil
 }
 
-func ParseJWT(token string, secret string) (map[string]interface{}, error) {
+func (*crypto) ParseJWT(token string, secret string) (map[string]interface{}, error) {
 	parsedToken, _ := jwt.Parse(token, func(token *jwt.Token) (interface{}, error) {
 		return []byte(secret), nil
 	})
@@ -72,7 +105,7 @@ func ParseJWT(token string, secret string) (map[string]interface{}, error) {
 	return payload, nil
 }
 
-func GenerateUUID() (string, error) {
+func (*crypto) GenerateUUID() (string, error) {
 	id, err := uuid.NewV4()
 	if err != nil {
 		return "", err

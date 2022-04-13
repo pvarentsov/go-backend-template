@@ -8,6 +8,7 @@ import (
 	"go-backend-template/api/http"
 	"go-backend-template/internal/database"
 	"go-backend-template/internal/usecase"
+	"go-backend-template/internal/util/crypto"
 )
 
 func main() {
@@ -28,10 +29,11 @@ func main() {
 
 	defer dbClient.Close()
 
+	crypto := crypto.NewCrypto()
 	dbService := database.NewService(dbClient)
-	usecases := usecase.NewUsecases(dbService, conf.Usecase())
+	usecases := usecase.NewUsecases(dbService, conf.Usecase(), crypto)
 
-	server := http.NewServer(conf.HTTP(), &usecases)
+	server := http.NewServer(conf.HTTP(), crypto, &usecases)
 
 	log.Fatal(server.Listen())
 }
