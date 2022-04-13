@@ -102,10 +102,10 @@ func (t *Transaction) rollback(ctx context.Context) error {
 
 // Transaction Context
 
-type txKey = string
+type txKey = int
 
 const (
-	key txKey = "tx"
+	key txKey = iota
 )
 
 func withTx(ctx context.Context, tx Transaction) context.Context {

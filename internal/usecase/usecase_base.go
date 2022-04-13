@@ -8,14 +8,14 @@ import (
 
 func NewUsecases(db database.Service, config Config) Usecases {
 	return Usecases{
-		Auth: &AuthUsecases{db: db, config: config},
-		User: &UserUsecases{db: db, config: config},
+		Auth: &authUsecases{db: db, config: config},
+		User: &userUsecases{db: db, config: config},
 	}
 }
 
 type Usecases struct {
-	Auth *AuthUsecases
-	User *UserUsecases
+	Auth AuthUsecases
+	User UserUsecases
 }
 
 type Config interface {

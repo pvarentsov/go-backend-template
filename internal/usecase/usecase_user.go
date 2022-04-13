@@ -7,12 +7,19 @@ import (
 	"go-backend-template/internal/usecase/dto"
 )
 
-type UserUsecases struct {
+type UserUsecases interface {
+	Add(ctx context.Context, in dto.UserAdd) (int64, error)
+	UpdateInfo(ctx context.Context, in dto.UserUpdateInfo) error
+	ChangePassword(ctx context.Context, in dto.UserChangePassword) error
+	GetById(ctx context.Context, userId int64) (dto.User, error)
+}
+
+type userUsecases struct {
 	db     database.Service
 	config Config
 }
 
-func (u *UserUsecases) Add(ctx context.Context, in dto.UserAdd) (userId int64, err error) {
+func (u *userUsecases) Add(ctx context.Context, in dto.UserAdd) (userId int64, err error) {
 	user, err := in.MapTo()
 	if err != nil {
 		return 0, err
@@ -36,7 +43,7 @@ func (u *UserUsecases) Add(ctx context.Context, in dto.UserAdd) (userId int64, e
 	return userId, err
 }
 
-func (u *UserUsecases) UpdateInfo(ctx context.Context, in dto.UserUpdateInfo) error {
+func (u *userUsecases) UpdateInfo(ctx context.Context, in dto.UserUpdateInfo) error {
 	user, err := u.db.UserRepo().GetById(ctx, in.Id)
 	if err != nil {
 		return err
@@ -50,7 +57,7 @@ func (u *UserUsecases) UpdateInfo(ctx context.Context, in dto.UserUpdateInfo) er
 	return err
 }
 
-func (u *UserUsecases) ChangePassword(ctx context.Context, in dto.UserChangePassword) error {
+func (u *userUsecases) ChangePassword(ctx context.Context, in dto.UserChangePassword) error {
 	user, err := u.db.UserRepo().GetById(ctx, in.Id)
 	if err != nil {
 		return err
@@ -63,7 +70,7 @@ func (u *UserUsecases) ChangePassword(ctx context.Context, in dto.UserChangePass
 	return err
 }
 
-func (u *UserUsecases) GetById(ctx context.Context, userId int64) (out dto.User, err error) {
+func (u *userUsecases) GetById(ctx context.Context, userId int64) (out dto.User, err error) {
 	user, err := u.db.UserRepo().GetById(ctx, userId)
 	if err != nil {
 		return out, err

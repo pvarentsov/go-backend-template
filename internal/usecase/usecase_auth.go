@@ -9,12 +9,18 @@ import (
 	"go-backend-template/internal/util/errors"
 )
 
-type AuthUsecases struct {
+type AuthUsecases interface {
+	Login(ctx context.Context, in dto.UserLogin) (dto.UserLoggedInfo, error)
+	VerifyAccessToken(accessToken string) (int64, error)
+	ParseAccessToken(accessToken string) (int64, error)
+}
+
+type authUsecases struct {
 	db     database.Service
 	config Config
 }
 
-func (u *AuthUsecases) Login(ctx context.Context, in dto.UserLogin) (out dto.UserLoggedInfo, err error) {
+func (u *authUsecases) Login(ctx context.Context, in dto.UserLogin) (out dto.UserLoggedInfo, err error) {
 	user, err := u.db.UserRepo().GetByEmail(ctx, in.Email)
 	if err != nil {
 		return out, errors.Wrap(errors.WrongCredentialsError, err, "")
@@ -30,7 +36,7 @@ func (u *AuthUsecases) Login(ctx context.Context, in dto.UserLogin) (out dto.Use
 	return out.MapFrom(user, token), nil
 }
 
-func (u *AuthUsecases) VerifyAccessToken(accessToken string) (int64, error) {
+func (u *authUsecases) VerifyAccessToken(accessToken string) (int64, error) {
 	payload, err := crypto.ParseAndValidateJWT(accessToken, u.config.AccessTokenSecret())
 	if err != nil {
 		return 0, errors.New(errors.UnauthorizedError, "")
@@ -41,7 +47,7 @@ func (u *AuthUsecases) VerifyAccessToken(accessToken string) (int64, error) {
 	return int64(userId), nil
 }
 
-func (u *AuthUsecases) ParseAccessToken(accessToken string) (int64, error) {
+func (u *authUsecases) ParseAccessToken(accessToken string) (int64, error) {
 	payload, err := crypto.ParseJWT(accessToken, u.config.AccessTokenSecret())
 	if err != nil {
 		return 0, errors.New(errors.UnauthorizedError, "")
@@ -52,7 +58,7 @@ func (u *AuthUsecases) ParseAccessToken(accessToken string) (int64, error) {
 	return int64(userId), nil
 }
 
-func (u *AuthUsecases) generateAccessToken(userId int64) (string, error) {
+func (u *authUsecases) generateAccessToken(userId int64) (string, error) {
 	payload := map[string]interface{}{"userId": userId}
 
 	token, err := crypto.GenerateJWT(
