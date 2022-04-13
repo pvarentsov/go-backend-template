@@ -11,21 +11,30 @@ import (
 
 // Service
 
-type Service struct {
-	UserRepo UserRepo
-	client   *Client
+type Service interface {
+	BeginTx(ctx context.Context, do func(ctx context.Context) error) error
+	UserRepo() UserRepo
 }
 
 func NewService(client *Client) Service {
 	repos := newRepos(client.pool, goqu.Dialect("postgres"))
 
-	return Service{
+	return &service{
 		client:   client,
-		UserRepo: repos.User,
+		userRepo: repos.User,
 	}
 }
 
-func (s *Service) BeginTx(ctx context.Context, do func(ctx context.Context) error) error {
+type service struct {
+	client   *Client
+	userRepo UserRepo
+}
+
+func (s *service) UserRepo() UserRepo {
+	return s.userRepo
+}
+
+func (s *service) BeginTx(ctx context.Context, do func(ctx context.Context) error) error {
 	_, ok := hasTx(ctx)
 	if ok {
 		return do(ctx)
@@ -34,7 +43,7 @@ func (s *Service) BeginTx(ctx context.Context, do func(ctx context.Context) erro
 	return s.beginTx(ctx, do)
 }
 
-func (s *Service) beginTx(ctx context.Context, do func(ctx context.Context) error) error {
+func (s *service) beginTx(ctx context.Context, do func(ctx context.Context) error) error {
 	conn, err := s.client.pool.Begin(ctx)
 	if err != nil {
 		return errors.New(errors.DatabaseError, "cannot open transaction").SetInternal(err)

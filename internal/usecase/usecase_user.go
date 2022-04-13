@@ -20,13 +20,13 @@ func (u *UserUsecases) Add(ctx context.Context, in dto.UserAdd) (userId int64, e
 
 	// Transaction demonstration
 	err = u.db.BeginTx(ctx, func(ctx context.Context) error {
-		userId, err = u.db.UserRepo.Add(ctx, user)
+		userId, err = u.db.UserRepo().Add(ctx, user)
 		if err != nil {
 			return err
 		}
 		user.Id = userId
 
-		userId, err = u.db.UserRepo.Update(ctx, user)
+		userId, err = u.db.UserRepo().Update(ctx, user)
 		if err != nil {
 			return err
 		}
@@ -37,7 +37,7 @@ func (u *UserUsecases) Add(ctx context.Context, in dto.UserAdd) (userId int64, e
 }
 
 func (u *UserUsecases) UpdateInfo(ctx context.Context, in dto.UserUpdateInfo) error {
-	user, err := u.db.UserRepo.GetById(ctx, in.Id)
+	user, err := u.db.UserRepo().GetById(ctx, in.Id)
 	if err != nil {
 		return err
 	}
@@ -45,26 +45,26 @@ func (u *UserUsecases) UpdateInfo(ctx context.Context, in dto.UserUpdateInfo) er
 	if err != nil {
 		return err
 	}
-	_, err = u.db.UserRepo.Update(ctx, user)
+	_, err = u.db.UserRepo().Update(ctx, user)
 
 	return err
 }
 
 func (u *UserUsecases) ChangePassword(ctx context.Context, in dto.UserChangePassword) error {
-	user, err := u.db.UserRepo.GetById(ctx, in.Id)
+	user, err := u.db.UserRepo().GetById(ctx, in.Id)
 	if err != nil {
 		return err
 	}
 	if err = user.ChangePassword(in.Password); err != nil {
 		return err
 	}
-	_, err = u.db.UserRepo.Update(ctx, user)
+	_, err = u.db.UserRepo().Update(ctx, user)
 
 	return err
 }
 
 func (u *UserUsecases) GetById(ctx context.Context, userId int64) (out dto.User, err error) {
-	user, err := u.db.UserRepo.GetById(ctx, userId)
+	user, err := u.db.UserRepo().GetById(ctx, userId)
 	if err != nil {
 		return out, err
 	}
