@@ -88,3 +88,62 @@ func TestUserUsecases_Add(t *testing.T) {
 		require.EqualError(t, err, actualErr.Error())
 	})
 }
+
+func TestUserUsecases_UpdateInfo(t *testing.T) {
+	in := dto.UserUpdateInfo{
+		Id:        int64(2),
+		FirstName: "UpdateFirstName",
+		LastName:  "UpdateLastName",
+		Email:     "user+update@email.com",
+	}
+	getUser := model.User{
+		Id:        in.Id,
+		FirstName: "FirstName",
+		LastName:  "LastName",
+		Email:     "user@email.com",
+		Password:  "password-hash",
+	}
+	updateUser := model.User{
+		Id:        in.Id,
+		FirstName: in.FirstName,
+		LastName:  in.LastName,
+		Email:     in.Email,
+		Password:  getUser.Password,
+	}
+
+	t.Run("expect it updates user", func(t *testing.T) {
+		prep := newTestPrep()
+
+		prep.userRepo.EXPECT().GetById(mock.Anything, in.Id).Return(getUser, nil)
+		prep.userRepo.EXPECT().Update(mock.Anything, updateUser).Return(in.Id, nil)
+
+		err := prep.userUsecases.UpdateInfo(prep.ctx, in)
+
+		require.NoError(t, err)
+	})
+
+	t.Run("expect it fails if user getting fails", func(t *testing.T) {
+		prep := newTestPrep()
+		err := errors.New("user getting failed")
+
+		prep.userRepo.EXPECT().GetById(mock.Anything, in.Id).Return(getUser, err)
+
+		actualErr := prep.userUsecases.UpdateInfo(prep.ctx, in)
+
+		require.Error(t, actualErr)
+		require.EqualError(t, err, actualErr.Error())
+	})
+
+	t.Run("expect it fails if user updating fails", func(t *testing.T) {
+		prep := newTestPrep()
+		err := errors.New("user updating failed")
+
+		prep.userRepo.EXPECT().GetById(mock.Anything, in.Id).Return(getUser, nil)
+		prep.userRepo.EXPECT().Update(mock.Anything, updateUser).Return(in.Id, err)
+
+		actualErr := prep.userUsecases.UpdateInfo(prep.ctx, in)
+
+		require.Error(t, actualErr)
+		require.EqualError(t, err, actualErr.Error())
+	})
+}
