@@ -104,6 +104,7 @@ Commands:
  docker-down                   Down docker services
 
  fmt                           Format source code
+ test                          Run unit tests
 
 Requirements:
  docker-compose                Docker Compose CLI: https://docs.docker.com/compose/reference

@@ -20,6 +20,7 @@ help:
 	@echo " docker-down                   Down docker services"
 	@echo
 	@echo " fmt                           Format source code"
+	@echo " test                          Run unit tests"
 	@echo
 	@echo "Requirements:"
 	@echo " docker-compose                Docker Compose CLI: https://docs.docker.com/compose/reference"
@@ -32,6 +33,12 @@ help:
 build-http:
 	@go build -o ./bin/http-server ./cmd/http/main.go
 	@echo executable file \"http-server\" saved in ./bin/http-server
+
+# Test
+
+.SILENT: test
+test:
+	@go test ./... -v
 
 # Create migration
 

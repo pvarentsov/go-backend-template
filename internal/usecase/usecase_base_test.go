@@ -8,7 +8,7 @@ import (
 	cryptomocks "go-backend-template/internal/util/crypto/mocks"
 )
 
-type testUsecase struct {
+type testPrep struct {
 	ctx      context.Context
 	crypto   *cryptomocks.Crypto
 	userRepo *dbmocks.UserRepo
@@ -16,7 +16,7 @@ type testUsecase struct {
 	userUsecases UserUsecases
 }
 
-func newTestUsecases() testUsecase {
+func newTestPrep() testPrep {
 	crypto := &cryptomocks.Crypto{}
 	userRepo := &dbmocks.UserRepo{}
 	db := dbmocks.NewService(userRepo)
@@ -24,7 +24,7 @@ func newTestUsecases() testUsecase {
 	config := &usecasemocks.Config{}
 	usecases := NewUsecases(db, config, crypto)
 
-	return testUsecase{
+	return testPrep{
 		ctx:      context.Background(),
 		crypto:   crypto,
 		userRepo: userRepo,

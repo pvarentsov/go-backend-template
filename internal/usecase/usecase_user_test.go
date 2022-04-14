@@ -1,6 +1,7 @@
 package usecase
 
 import (
+	"errors"
 	"testing"
 
 	"github.com/stretchr/testify/mock"
@@ -11,19 +12,20 @@ import (
 )
 
 func TestUserUsecases_Add(t *testing.T) {
-	test := newTestUsecases()
+	prep := newTestPrep()
 
 	userId := int64(1)
 	password := "password"
 	passwordHash := "password-hash"
 
+	in := dto.UserAdd{
+		FirstName: "FirstName",
+		LastName:  "LastName",
+		Email:     "user@email.com",
+		Password:  password,
+	}
+
 	t.Run("expect it adds new user", func(t *testing.T) {
-		in := dto.UserAdd{
-			FirstName: "FirstName",
-			LastName:  "LastName",
-			Email:     "user@email.com",
-			Password:  password,
-		}
 		createUser := model.User{
 			FirstName: in.FirstName,
 			LastName:  in.LastName,
@@ -38,13 +40,44 @@ func TestUserUsecases_Add(t *testing.T) {
 			Password:  createUser.Password,
 		}
 
-		test.crypto.EXPECT().HashPassword(password).Return(passwordHash, nil)
-		test.userRepo.EXPECT().Add(mock.Anything, createUser).Return(userId, nil)
-		test.userRepo.EXPECT().Update(mock.Anything, updateUser).Return(userId, nil)
+		prep.crypto.EXPECT().HashPassword(password).
+			Times(1).
+			Once().
+			Return(passwordHash, nil)
+		prep.userRepo.EXPECT().Add(mock.Anything, createUser).
+			Times(0).
+			Once().
+			Return(userId, nil)
+		prep.userRepo.EXPECT().Update(mock.Anything, updateUser).
+			Times(0).
+			Once().
+			Return(userId, nil)
 
-		actualUserId, err := test.userUsecases.Add(test.ctx, in)
+		actualUserId, err := prep.userUsecases.Add(prep.ctx, in)
 
 		require.NoError(t, err)
 		require.Equal(t, userId, actualUserId)
+	})
+
+	t.Run("expect it fails if password is weak", func(t *testing.T) {
+		err := errors.New("weak password")
+
+		prep.crypto.EXPECT().HashPassword(password).
+			Times(1).
+			Once().
+			Return("", err)
+		prep.userRepo.EXPECT().Add(mock.Anything, mock.Anything).
+			Times(0).
+			Once().
+			Return(userId, nil)
+		prep.userRepo.EXPECT().Update(mock.Anything, mock.Anything).
+			Times(0).
+			Once().
+			Return(userId, nil)
+
+		_, actualErr := prep.userUsecases.Add(prep.ctx, in)
+
+		require.Error(t, actualErr)
+		require.EqualError(t, err, actualErr.Error())
 	})
 }
