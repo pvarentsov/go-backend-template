@@ -147,3 +147,116 @@ func TestUserUsecases_UpdateInfo(t *testing.T) {
 		require.EqualError(t, err, actualErr.Error())
 	})
 }
+
+func TestUserUsecases_ChangePassword(t *testing.T) {
+	in := dto.UserChangePassword{
+		Id:       int64(3),
+		Password: "new-password",
+	}
+	getUser := model.User{
+		Id:        in.Id,
+		FirstName: "FirstName",
+		LastName:  "LastName",
+		Email:     "user@email.com",
+		Password:  "old-password-hash",
+	}
+	updateUser := model.User{
+		Id:        getUser.Id,
+		FirstName: getUser.FirstName,
+		LastName:  getUser.LastName,
+		Email:     getUser.Email,
+		Password:  "new-password-hash",
+	}
+
+	t.Run("expect it changes user password", func(t *testing.T) {
+		prep := newTestPrep()
+
+		prep.userRepo.EXPECT().GetById(mock.Anything, in.Id).Return(getUser, nil)
+		prep.crypto.EXPECT().HashPassword(in.Password).Return(updateUser.Password, nil)
+		prep.userRepo.EXPECT().Update(mock.Anything, updateUser).Return(in.Id, nil)
+
+		err := prep.userUsecases.ChangePassword(prep.ctx, in)
+
+		require.NoError(t, err)
+	})
+
+	t.Run("expect it fails if user getting fails", func(t *testing.T) {
+		prep := newTestPrep()
+		err := errors.New("user getting failed")
+
+		prep.userRepo.EXPECT().GetById(mock.Anything, in.Id).Return(getUser, err)
+
+		actualErr := prep.userUsecases.ChangePassword(prep.ctx, in)
+
+		require.Error(t, actualErr)
+		require.EqualError(t, err, actualErr.Error())
+	})
+
+	t.Run("expect it fails if password hashing fails", func(t *testing.T) {
+		prep := newTestPrep()
+		err := errors.New("password hashing failed")
+
+		prep.userRepo.EXPECT().GetById(mock.Anything, in.Id).Return(getUser, nil)
+		prep.crypto.EXPECT().HashPassword(in.Password).Return(updateUser.Password, err)
+
+		actualErr := prep.userUsecases.ChangePassword(prep.ctx, in)
+
+		require.Error(t, actualErr)
+		require.EqualError(t, err, actualErr.Error())
+	})
+
+	t.Run("expect it fails if user updating fails", func(t *testing.T) {
+		prep := newTestPrep()
+		err := errors.New("user updating failed")
+
+		prep.userRepo.EXPECT().GetById(mock.Anything, in.Id).Return(getUser, nil)
+		prep.crypto.EXPECT().HashPassword(in.Password).Return(updateUser.Password, nil)
+		prep.userRepo.EXPECT().Update(mock.Anything, updateUser).Return(in.Id, err)
+
+		actualErr := prep.userUsecases.ChangePassword(prep.ctx, in)
+
+		require.Error(t, actualErr)
+		require.EqualError(t, err, actualErr.Error())
+	})
+}
+
+func TestUserUsecases_GetById(t *testing.T) {
+	userId := int64(4)
+
+	getUser := model.User{
+		Id:        userId,
+		FirstName: "FirstName",
+		LastName:  "LastName",
+		Email:     "user@email.com",
+		Password:  "password-hash",
+	}
+	out := dto.User{
+		Id:        getUser.Id,
+		FirstName: getUser.FirstName,
+		LastName:  getUser.LastName,
+		Email:     getUser.Email,
+	}
+
+	t.Run("expect it gets user", func(t *testing.T) {
+		prep := newTestPrep()
+
+		prep.userRepo.EXPECT().GetById(mock.Anything, userId).Return(getUser, nil)
+
+		actualOut, err := prep.userUsecases.GetById(prep.ctx, userId)
+
+		require.NoError(t, err)
+		require.Equal(t, out, actualOut)
+	})
+
+	t.Run("expect it fails if user getting fails", func(t *testing.T) {
+		prep := newTestPrep()
+		err := errors.New("user getting failed")
+
+		prep.userRepo.EXPECT().GetById(mock.Anything, userId).Return(getUser, err)
+
+		_, actualErr := prep.userUsecases.GetById(prep.ctx, userId)
+
+		require.Error(t, actualErr)
+		require.EqualError(t, err, actualErr.Error())
+	})
+}
