@@ -11,6 +11,7 @@ import (
 type testPrep struct {
 	ctx      context.Context
 	crypto   *cryptomocks.Crypto
+	config   *usecasemocks.Config
 	userRepo *dbmocks.UserRepo
 
 	userUsecases UserUsecases
@@ -18,15 +19,16 @@ type testPrep struct {
 
 func newTestPrep() testPrep {
 	crypto := &cryptomocks.Crypto{}
-	userRepo := &dbmocks.UserRepo{}
-	db := dbmocks.NewService(userRepo)
-
 	config := &usecasemocks.Config{}
+	userRepo := &dbmocks.UserRepo{}
+
+	db := dbmocks.NewService(userRepo)
 	usecases := NewUsecases(db, config, crypto)
 
 	return testPrep{
 		ctx:      context.Background(),
 		crypto:   crypto,
+		config:   config,
 		userRepo: userRepo,
 
 		userUsecases: usecases.User,
