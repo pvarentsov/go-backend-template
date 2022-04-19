@@ -61,7 +61,7 @@ func TestAuthUsecases_Login(t *testing.T) {
 		require.Equal(t, loginUser, actualLoginUser)
 	})
 
-	t.Run("expect it fails if user getting fails", func(t *testing.T) {
+	t.Run("expect it fails if user with such email does't exist", func(t *testing.T) {
 		prep := newTestPrep()
 
 		err := errors.New("user getting failed")
@@ -88,7 +88,7 @@ func TestAuthUsecases_Login(t *testing.T) {
 		require.EqualError(t, err, actualErr.Error())
 	})
 
-	t.Run("expect it fails if token generating fails", func(t *testing.T) {
+	t.Run("expect it fails if token generation fails", func(t *testing.T) {
 		prep := newTestPrep()
 		err := errors.New("token generation failed")
 
