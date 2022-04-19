@@ -14,6 +14,7 @@ type testPrep struct {
 	config   *usecasemocks.Config
 	userRepo *dbmocks.UserRepo
 
+	authUsecases AuthUsecases
 	userUsecases UserUsecases
 }
 
@@ -23,6 +24,7 @@ func newTestPrep() testPrep {
 	userRepo := &dbmocks.UserRepo{}
 
 	db := dbmocks.NewService(userRepo)
+
 	usecases := NewUsecases(db, config, crypto)
 
 	return testPrep{
@@ -31,6 +33,7 @@ func newTestPrep() testPrep {
 		config:   config,
 		userRepo: userRepo,
 
+		authUsecases: usecases.Auth,
 		userUsecases: usecases.User,
 	}
 }

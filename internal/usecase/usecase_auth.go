@@ -62,14 +62,9 @@ func (u *authUsecases) ParseAccessToken(accessToken string) (int64, error) {
 func (u *authUsecases) generateAccessToken(userId int64) (string, error) {
 	payload := map[string]interface{}{"userId": userId}
 
-	token, err := u.crypto.GenerateJWT(
+	return u.crypto.GenerateJWT(
 		payload,
 		u.config.AccessTokenSecret(),
 		u.config.AccessTokenExpiresDate(),
 	)
-	if err != nil {
-		return "", err
-	}
-
-	return token, nil
 }

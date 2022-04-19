@@ -13,6 +13,14 @@ type Config struct {
 	mock.Mock
 }
 
+type Config_Expecter struct {
+	mock *mock.Mock
+}
+
+func (_m *Config) EXPECT() *Config_Expecter {
+	return &Config_Expecter{mock: &_m.Mock}
+}
+
 // AccessTokenExpiresDate provides a mock function with given fields:
 func (_m *Config) AccessTokenExpiresDate() time.Time {
 	ret := _m.Called()
@@ -27,6 +35,28 @@ func (_m *Config) AccessTokenExpiresDate() time.Time {
 	return r0
 }
 
+// Config_AccessTokenExpiresDate_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'AccessTokenExpiresDate'
+type Config_AccessTokenExpiresDate_Call struct {
+	*mock.Call
+}
+
+// AccessTokenExpiresDate is a helper method to define mock.On call
+func (_e *Config_Expecter) AccessTokenExpiresDate() *Config_AccessTokenExpiresDate_Call {
+	return &Config_AccessTokenExpiresDate_Call{Call: _e.mock.On("AccessTokenExpiresDate")}
+}
+
+func (_c *Config_AccessTokenExpiresDate_Call) Run(run func()) *Config_AccessTokenExpiresDate_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run()
+	})
+	return _c
+}
+
+func (_c *Config_AccessTokenExpiresDate_Call) Return(_a0 time.Time) *Config_AccessTokenExpiresDate_Call {
+	_c.Call.Return(_a0)
+	return _c
+}
+
 // AccessTokenSecret provides a mock function with given fields:
 func (_m *Config) AccessTokenSecret() string {
 	ret := _m.Called()
@@ -39,4 +69,26 @@ func (_m *Config) AccessTokenSecret() string {
 	}
 
 	return r0
+}
+
+// Config_AccessTokenSecret_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'AccessTokenSecret'
+type Config_AccessTokenSecret_Call struct {
+	*mock.Call
+}
+
+// AccessTokenSecret is a helper method to define mock.On call
+func (_e *Config_Expecter) AccessTokenSecret() *Config_AccessTokenSecret_Call {
+	return &Config_AccessTokenSecret_Call{Call: _e.mock.On("AccessTokenSecret")}
+}
+
+func (_c *Config_AccessTokenSecret_Call) Run(run func()) *Config_AccessTokenSecret_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run()
+	})
+	return _c
+}
+
+func (_c *Config_AccessTokenSecret_Call) Return(_a0 string) *Config_AccessTokenSecret_Call {
+	_c.Call.Return(_a0)
+	return _c
 }
