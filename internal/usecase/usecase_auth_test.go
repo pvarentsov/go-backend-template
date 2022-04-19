@@ -64,7 +64,7 @@ func TestAuthUsecases_Login(t *testing.T) {
 	t.Run("expect it fails if user with such email does't exist", func(t *testing.T) {
 		prep := newTestPrep()
 
-		err := errors.New("user getting failed")
+		err := errors.New("user not found")
 		wrapErr := coreErrors.New(coreErrors.WrongCredentialsError, "")
 
 		prep.userRepo.EXPECT().GetByEmail(mock.Anything, in.Email).Return(getUser, err)
