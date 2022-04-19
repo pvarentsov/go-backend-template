@@ -136,7 +136,7 @@ func TestAuthUsecases_VerifyAccessToken(t *testing.T) {
 
 		_, actualErr := prep.authUsecases.VerifyAccessToken(token)
 
-		require.Error(t, err)
+		require.Error(t, actualErr)
 		require.Equal(t, wrapErr, actualErr)
 	})
 }
@@ -171,7 +171,7 @@ func TestAuthUsecases_ParseAccessToken(t *testing.T) {
 
 		_, actualErr := prep.authUsecases.ParseAccessToken(token)
 
-		require.Error(t, err)
+		require.Error(t, actualErr)
 		require.Equal(t, wrapErr, actualErr)
 	})
 }
