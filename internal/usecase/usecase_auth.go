@@ -43,7 +43,10 @@ func (u *authUsecases) VerifyAccessToken(accessToken string) (int64, error) {
 		return 0, errors.New(errors.UnauthorizedError, "")
 	}
 
-	userId := payload["userId"].(float64)
+	userId, ok := payload["userId"].(float64)
+	if !ok {
+		return 0, errors.New(errors.UnauthorizedError, "")
+	}
 
 	return int64(userId), nil
 }
@@ -54,7 +57,10 @@ func (u *authUsecases) ParseAccessToken(accessToken string) (int64, error) {
 		return 0, errors.New(errors.UnauthorizedError, "")
 	}
 
-	userId := payload["userId"].(float64)
+	userId, ok := payload["userId"].(float64)
+	if !ok {
+		return 0, errors.New(errors.UnauthorizedError, "")
+	}
 
 	return int64(userId), nil
 }

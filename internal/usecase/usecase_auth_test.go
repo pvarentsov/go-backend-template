@@ -105,3 +105,73 @@ func TestAuthUsecases_Login(t *testing.T) {
 		require.EqualError(t, err, actualErr.Error())
 	})
 }
+
+func TestAuthUsecases_VerifyAccessToken(t *testing.T) {
+	userId := int64(1)
+
+	token := "token"
+	tokenSecret := "token-secret"
+	tokenPayload := map[string]interface{}{"userId": float64(userId)}
+
+	t.Run("expect it virifies token", func(t *testing.T) {
+		prep := newTestPrep()
+
+		prep.config.EXPECT().AccessTokenSecret().Return(tokenSecret)
+		prep.crypto.EXPECT().ParseAndValidateJWT(token, tokenSecret).Return(tokenPayload, nil)
+
+		actualUserId, err := prep.authUsecases.VerifyAccessToken(token)
+
+		require.NoError(t, err)
+		require.Equal(t, userId, actualUserId)
+	})
+
+	t.Run("expect it fails if token is not valid", func(t *testing.T) {
+		prep := newTestPrep()
+
+		err := errors.New("token is not valid")
+		wrapErr := coreErrors.New(coreErrors.UnauthorizedError, "")
+
+		prep.config.EXPECT().AccessTokenSecret().Return(tokenSecret)
+		prep.crypto.EXPECT().ParseAndValidateJWT(token, tokenSecret).Return(tokenPayload, err)
+
+		_, actualErr := prep.authUsecases.VerifyAccessToken(token)
+
+		require.Error(t, err)
+		require.Equal(t, wrapErr, actualErr)
+	})
+}
+
+func TestAuthUsecases_ParseAccessToken(t *testing.T) {
+	userId := int64(1)
+
+	token := "token"
+	tokenSecret := "token-secret"
+	tokenPayload := map[string]interface{}{"userId": float64(userId)}
+
+	t.Run("expect it virifies token", func(t *testing.T) {
+		prep := newTestPrep()
+
+		prep.config.EXPECT().AccessTokenSecret().Return(tokenSecret)
+		prep.crypto.EXPECT().ParseJWT(token, tokenSecret).Return(tokenPayload, nil)
+
+		actualUserId, err := prep.authUsecases.ParseAccessToken(token)
+
+		require.NoError(t, err)
+		require.Equal(t, userId, actualUserId)
+	})
+
+	t.Run("expect it fails if token parsing fails", func(t *testing.T) {
+		prep := newTestPrep()
+
+		err := errors.New("token parsing failed")
+		wrapErr := coreErrors.New(coreErrors.UnauthorizedError, "")
+
+		prep.config.EXPECT().AccessTokenSecret().Return(tokenSecret)
+		prep.crypto.EXPECT().ParseJWT(token, tokenSecret).Return(tokenPayload, err)
+
+		_, actualErr := prep.authUsecases.ParseAccessToken(token)
+
+		require.Error(t, err)
+		require.Equal(t, wrapErr, actualErr)
+	})
+}

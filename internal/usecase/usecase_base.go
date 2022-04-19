@@ -1,3 +1,5 @@
+//go:generate mockery --name Config --filename usecase_base.go --with-expecter
+
 package usecase
 
 import (

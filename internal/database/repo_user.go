@@ -1,3 +1,5 @@
+//go:generate mockery --name UserRepo --filename repo_user.go --with-expecter
+
 package database
 
 import (

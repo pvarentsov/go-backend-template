@@ -1,3 +1,5 @@
+//go:generate mockery --name Crypto --filename crypto.go --with-expecter
+
 package crypto
 
 import (
