@@ -17,8 +17,8 @@ services:
 
 volumes:
   postgres_data:
-    name: 'go-backend-template-data'
+    name: 'go-backend-template-postgres-data'
 
 networks:
   network:
-    name: 'go-backend-template-data'
+    name: 'go-backend-template-network'
