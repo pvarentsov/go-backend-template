@@ -5,8 +5,8 @@ import (
 	"time"
 
 	"go-backend-template/api/http"
-	"go-backend-template/internal/database"
-	"go-backend-template/internal/usecase"
+	"go-backend-template/internal/auth"
+	"go-backend-template/internal/base/database"
 
 	"github.com/kelseyhightower/envconfig"
 	"github.com/subosito/gotenv"
@@ -47,16 +47,16 @@ func (c *Config) HTTP() http.Config {
 	}
 }
 
-func (c *Config) Usecase() usecase.Config {
-	return &usecaseConfig{
-		accessTokenExpiresTTL: c.AccessTokenExpiresTTL,
-		accessTokenSecret:     c.AccessTokenSecret,
-	}
-}
-
 func (c *Config) Database() database.Config {
 	return &databaseConfig{
 		url: c.DatabaseURL,
+	}
+}
+
+func (c *Config) Auth() auth.Config {
+	return &authConfig{
+		accessTokenExpiresTTL: c.AccessTokenExpiresTTL,
+		accessTokenSecret:     c.AccessTokenSecret,
 	}
 }
 
@@ -81,18 +81,18 @@ func (c *databaseConfig) ConnString() string {
 	return c.url
 }
 
-// Usecase
+// Auth
 
-type usecaseConfig struct {
+type authConfig struct {
 	accessTokenExpiresTTL int
 	accessTokenSecret     string
 }
 
-func (c *usecaseConfig) AccessTokenSecret() string {
+func (c *authConfig) AccessTokenSecret() string {
 	return c.accessTokenSecret
 }
 
-func (c *usecaseConfig) AccessTokenExpiresDate() time.Time {
+func (c *authConfig) AccessTokenExpiresDate() time.Time {
 	duration := time.Duration(c.accessTokenExpiresTTL)
 	return time.Now().UTC().Add(time.Minute * duration)
 }

@@ -1,9 +1,9 @@
 package http
 
 import (
-	"go-backend-template/internal/util/errors"
-
 	"github.com/gin-gonic/gin"
+
+	"go-backend-template/internal/base/errors"
 )
 
 func bindBody(payload interface{}, c *gin.Context) error {

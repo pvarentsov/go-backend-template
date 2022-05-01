@@ -4,49 +4,50 @@ import (
 	"fmt"
 	"time"
 
-	"go-backend-template/internal/usecase/dto"
-	"go-backend-template/internal/util/contexts"
-	"go-backend-template/internal/util/errors"
-
 	"github.com/gin-gonic/gin"
+
+	"go-backend-template/internal/auth"
+	"go-backend-template/internal/base/contexts"
+	"go-backend-template/internal/base/errors"
+	"go-backend-template/internal/user"
 )
 
 type router struct {
-	server *Server
+	*Server
 }
 
 func newRouter(server *Server) *router {
 	return &router{
-		server: server,
+		Server: server,
 	}
 }
 
 func (r *router) init() {
-	r.server.engine.Use(r.trace())
-	r.server.engine.Use(r.recover())
-	r.server.engine.Use(r.logger())
+	r.engine.Use(r.trace())
+	r.engine.Use(r.recover())
+	r.engine.Use(r.logger())
 
-	r.server.engine.POST("/login", r.login)
+	r.engine.POST("/login", r.login)
 
-	r.server.engine.POST("/users", r.addUser)
-	r.server.engine.GET("/users/me", r.authenticate, r.getMe)
-	r.server.engine.PUT("/users/me", r.authenticate, r.updateMyInfo)
-	r.server.engine.PATCH("/users/me/password", r.authenticate, r.changeMyPassword)
+	r.engine.POST("/users", r.addUser)
+	r.engine.GET("/users/me", r.authenticate, r.getMe)
+	r.engine.PUT("/users/me", r.authenticate, r.updateMe)
+	r.engine.PATCH("/users/me/password", r.authenticate, r.changeMyPassword)
 
-	r.server.engine.NoRoute(r.methodNotFound)
+	r.engine.NoRoute(r.methodNotFound)
 }
 
 // Auth methods
 
 func (r *router) login(c *gin.Context) {
-	var loginUserDTO dto.UserLogin
+	var loginUserDto auth.LoginUserDto
 
-	if err := bindBody(&loginUserDTO, c); err != nil {
+	if err := bindBody(&loginUserDto, c); err != nil {
 		errorResponse(err, nil).reply(c)
 		return
 	}
 
-	user, err := r.server.usecases.Auth.Login(c, loginUserDTO)
+	user, err := r.authService.Login(c, loginUserDto)
 	if err != nil {
 		errorResponse(err, nil).reply(c)
 		return
@@ -58,7 +59,7 @@ func (r *router) login(c *gin.Context) {
 func (r *router) authenticate(c *gin.Context) {
 	token := c.Request.Header.Get("Authorization")
 
-	userId, err := r.server.usecases.Auth.VerifyAccessToken(token)
+	userId, err := r.authService.VerifyAccessToken(token)
 	if err != nil {
 		response := errorResponse(err, nil)
 		c.AbortWithStatusJSON(response.Status, response)
@@ -70,14 +71,14 @@ func (r *router) authenticate(c *gin.Context) {
 // User methods
 
 func (r *router) addUser(c *gin.Context) {
-	var addUserDTO dto.UserAdd
+	var addUserDto user.AddUserDto
 
-	if err := bindBody(&addUserDTO, c); err != nil {
+	if err := bindBody(&addUserDto, c); err != nil {
 		errorResponse(err, nil).reply(c)
 		return
 	}
 
-	user, err := r.server.usecases.User.Add(contextWithReqInfo(c), addUserDTO)
+	user, err := r.userUsecases.Add(contextWithReqInfo(c), addUserDto)
 	if err != nil {
 		errorResponse(err, nil).reply(c)
 		return
@@ -86,18 +87,18 @@ func (r *router) addUser(c *gin.Context) {
 	okResponse(user).reply(c)
 }
 
-func (r *router) updateMyInfo(c *gin.Context) {
-	var updateUserDTO dto.UserUpdateInfo
+func (r *router) updateMe(c *gin.Context) {
+	var updateUserDto user.UpdateUserDto
 
 	reqInfo := getReqInfo(c)
-	updateUserDTO.Id = reqInfo.UserId
+	updateUserDto.Id = reqInfo.UserId
 
-	if err := bindBody(&updateUserDTO, c); err != nil {
+	if err := bindBody(&updateUserDto, c); err != nil {
 		errorResponse(err, nil).reply(c)
 		return
 	}
 
-	err := r.server.usecases.User.UpdateInfo(contextWithReqInfo(c), updateUserDTO)
+	err := r.userUsecases.Update(contextWithReqInfo(c), updateUserDto)
 	if err != nil {
 		errorResponse(err, nil).reply(c)
 		return
@@ -107,17 +108,17 @@ func (r *router) updateMyInfo(c *gin.Context) {
 }
 
 func (r *router) changeMyPassword(c *gin.Context) {
-	var changeUserPasswordDTO dto.UserChangePassword
+	var changeUserPasswordDto user.ChangeUserPasswordDto
 
 	reqInfo := getReqInfo(c)
-	changeUserPasswordDTO.Id = reqInfo.UserId
+	changeUserPasswordDto.Id = reqInfo.UserId
 
-	if err := bindBody(&changeUserPasswordDTO, c); err != nil {
+	if err := bindBody(&changeUserPasswordDto, c); err != nil {
 		errorResponse(err, nil).reply(c)
 		return
 	}
 
-	err := r.server.usecases.User.ChangePassword(contextWithReqInfo(c), changeUserPasswordDTO)
+	err := r.userUsecases.ChangePassword(contextWithReqInfo(c), changeUserPasswordDto)
 	if err != nil {
 		errorResponse(err, nil).reply(c)
 		return
@@ -129,7 +130,7 @@ func (r *router) changeMyPassword(c *gin.Context) {
 func (r *router) getMe(c *gin.Context) {
 	reqInfo := getReqInfo(c)
 
-	user, err := r.server.usecases.User.GetById(contextWithReqInfo(c), reqInfo.UserId)
+	user, err := r.userUsecases.GetById(contextWithReqInfo(c), reqInfo.UserId)
 	if err != nil {
 		errorResponse(err, nil).reply(c)
 		return
@@ -156,7 +157,7 @@ func (r *router) trace() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		traceId := c.Request.Header.Get("Trace-Id")
 		if traceId == "" {
-			traceId, _ = r.server.crypto.GenerateUUID()
+			traceId, _ = r.crypto.GenerateUUID()
 		}
 
 		setTraceId(c, traceId)

@@ -1,4 +1,4 @@
-//go:generate mockery --name Crypto --filename crypto.go --with-expecter
+//go:generate mockery --name Crypto --filename crypto.go --output ./mock --with-expecter
 
 package crypto
 
@@ -10,7 +10,7 @@ import (
 	"github.com/gofrs/uuid"
 	"github.com/golang-jwt/jwt"
 
-	"go-backend-template/internal/util/errors"
+	"go-backend-template/internal/base/errors"
 )
 
 type Crypto interface {
