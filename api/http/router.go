@@ -2,6 +2,7 @@ package http
 
 import (
 	"fmt"
+	"net/http"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -37,8 +38,6 @@ func (r *router) init() {
 	r.engine.NoRoute(r.methodNotFound)
 }
 
-// Auth methods
-
 func (r *router) login(c *gin.Context) {
 	var loginUserDto auth.LoginUserDto
 
@@ -67,8 +66,6 @@ func (r *router) authenticate(c *gin.Context) {
 
 	setUserId(c, userId)
 }
-
-// User methods
 
 func (r *router) addUser(c *gin.Context) {
 	var addUserDto user.AddUserDto
@@ -139,8 +136,6 @@ func (r *router) getMe(c *gin.Context) {
 	okResponse(user).reply(c)
 }
 
-// System
-
 func (r *router) methodNotFound(c *gin.Context) {
 	err := errors.New(errors.NotFoundError, "method not found")
 	errorResponse(err, nil).reply(c)
@@ -183,4 +178,42 @@ func (r *router) logger() gin.HandlerFunc {
 			param.Latency,
 		)
 	})
+}
+
+func bindBody(payload interface{}, c *gin.Context) error {
+	err := c.BindJSON(payload)
+
+	if err != nil {
+		return errors.New(errors.BadRequestError, err.Error())
+	}
+
+	return nil
+}
+
+type response struct {
+	Status  int         `json:"status"`
+	Message string      `json:"message"`
+	Data    interface{} `json:"data"`
+}
+
+func okResponse(data interface{}) *response {
+	return &response{
+		Status:  http.StatusOK,
+		Message: "ok",
+		Data:    data,
+	}
+}
+
+func errorResponse(err error, data interface{}) *response {
+	status, message := parseError(err)
+
+	return &response{
+		Status:  status,
+		Message: message,
+		Data:    data,
+	}
+}
+
+func (r *response) reply(c *gin.Context) {
+	c.JSON(r.Status, r)
 }

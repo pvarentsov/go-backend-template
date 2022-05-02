@@ -10,6 +10,10 @@ import (
 	"go-backend-template/internal/user"
 )
 
+type Config interface {
+	Address() string
+}
+
 type ServerOpts struct {
 	UserUsecases user.UserUsecases
 	AuthService  auth.AuthService
