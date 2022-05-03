@@ -6,9 +6,11 @@ import (
 
 	"go-backend-template/api/cli"
 	"go-backend-template/api/http"
-	"go-backend-template/internal/database"
-	"go-backend-template/internal/usecase"
-	"go-backend-template/internal/util/crypto"
+	"go-backend-template/internal/base/crypto"
+	"go-backend-template/internal/base/database"
+
+	authImpl "go-backend-template/internal/auth/impl"
+	userImpl "go-backend-template/internal/user/impl"
 )
 
 func main() {
@@ -31,9 +33,33 @@ func main() {
 
 	crypto := crypto.NewCrypto()
 	dbService := database.NewService(dbClient)
-	usecases := usecase.NewUsecases(dbService, conf.Usecase(), crypto)
 
-	server := http.NewServer(conf.HTTP(), crypto, &usecases)
+	userRepositoryOpts := userImpl.UserRepositoryOpts{
+		ConnManager: dbService,
+	}
+	userRepository := userImpl.NewUserRepository(userRepositoryOpts)
+
+	authServiceOpts := authImpl.AuthServiceOpts{
+		Crypto:         crypto,
+		Config:         conf.Auth(),
+		UserRepository: userRepository,
+	}
+	authService := authImpl.NewAuthService(authServiceOpts)
+
+	userUsecasesOpts := userImpl.UserUsecasesOpts{
+		TxManager:      dbService,
+		UserRepository: userRepository,
+		Crypto:         crypto,
+	}
+	userUsecases := userImpl.NewUserUsecases(userUsecasesOpts)
+
+	serverOpts := http.ServerOpts{
+		UserUsecases: userUsecases,
+		AuthService:  authService,
+		Crypto:       crypto,
+		Config:       conf.HTTP(),
+	}
+	server := http.NewServer(serverOpts)
 
 	log.Fatal(server.Listen())
 }

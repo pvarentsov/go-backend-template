@@ -3,7 +3,7 @@ package http
 import (
 	"net/http"
 
-	"go-backend-template/internal/util/errors"
+	"go-backend-template/internal/base/errors"
 )
 
 func parseError(err error) (int, string) {
