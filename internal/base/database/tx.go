@@ -8,7 +8,7 @@ import (
 	"go-backend-template/internal/base/errors"
 )
 
-type txKey = int
+type txKey int
 
 const (
 	key txKey = iota

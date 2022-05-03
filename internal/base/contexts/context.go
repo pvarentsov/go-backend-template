@@ -2,7 +2,7 @@ package contexts
 
 import "context"
 
-type reqInfoKey = string
+type reqInfoKey string
 
 const (
 	key reqInfoKey = "req-info"
