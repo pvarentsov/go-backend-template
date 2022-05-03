@@ -26,12 +26,12 @@ func (c *Client) Connect() error {
 
 	config, err := pgxpool.ParseConfig(c.url)
 	if err != nil {
-		return errors.New(errors.DatabaseError, "cannot connect to database").SetInternal(err)
+		return errors.Wrap(errors.DatabaseError, err, "cannot connect to database")
 	}
 
 	pool, err := pgxpool.ConnectConfig(c.ctx, config)
 	if err != nil {
-		return errors.New(errors.DatabaseError, "cannot connect to database").SetInternal(err)
+		return errors.Wrap(errors.DatabaseError, err, "cannot connect to database")
 	}
 
 	c.pool = pool

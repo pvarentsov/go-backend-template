@@ -20,17 +20,11 @@ func (e Error) Status() Status {
 	return e.status
 }
 
-func (e Error) SetInternal(internal error) Error {
-	e.internal = internal
-	return e
-}
-
 func New(status Status, message string) Error {
 	err := Error{
 		status:  status,
 		message: message,
 	}
-
 	if len(message) == 0 {
 		err.message = status.Message()
 	}
@@ -58,7 +52,7 @@ func Wrap(status Status, err error, message string) Error {
 		return coreErr
 	}
 
-	return New(status, message).SetInternal(err)
+	return New(status, message).setInternal(err)
 }
 
 func Wrapf(status Status, err error, message string, a ...interface{}) Error {
@@ -68,5 +62,10 @@ func Wrapf(status Status, err error, message string, a ...interface{}) Error {
 		return coreErr
 	}
 
-	return Errorf(status, message, a...).SetInternal(err)
+	return Errorf(status, message, a...).setInternal(err)
+}
+
+func (e Error) setInternal(internal error) Error {
+	e.internal = internal
+	return e
 }

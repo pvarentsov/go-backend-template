@@ -21,7 +21,7 @@ type transaction struct {
 func (t *transaction) commit(ctx context.Context) error {
 	err := t.conn.Commit(ctx)
 	if err != nil {
-		return errors.New(errors.DatabaseError, "cannot commit transaction").SetInternal(err)
+		return errors.Wrap(errors.DatabaseError, err, "cannot commit transaction")
 	}
 
 	return nil
@@ -30,7 +30,7 @@ func (t *transaction) commit(ctx context.Context) error {
 func (t *transaction) rollback(ctx context.Context) error {
 	err := t.conn.Rollback(ctx)
 	if err != nil {
-		return errors.New(errors.DatabaseError, "cannot rollback transaction").SetInternal(err)
+		return errors.Wrap(errors.DatabaseError, err, "cannot rollback transaction")
 	}
 
 	return nil
@@ -52,7 +52,7 @@ func hasTx(ctx context.Context) (transaction, bool) {
 func runTx(ctx context.Context, client *Client, do func(ctx context.Context) error) error {
 	conn, err := client.pool.Begin(ctx)
 	if err != nil {
-		return errors.New(errors.DatabaseError, "cannot open transaction").SetInternal(err)
+		return errors.Wrap(errors.DatabaseError, err, "cannot open transaction")
 	}
 
 	tx := transaction{conn: conn}
