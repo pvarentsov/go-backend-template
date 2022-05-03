@@ -2,6 +2,8 @@
     <img height="80" src="./assets/gopher-icon.gif" alt="Go"><br>Backend Template
 </h1>
 
+> Clean architecture based backend template in Go.
+
 ## Makefile
 
 ```shell
