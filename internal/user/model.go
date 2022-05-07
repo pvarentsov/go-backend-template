@@ -1,11 +1,11 @@
 package user
 
 import (
-	"go-backend-template/internal/base/crypto"
-	"go-backend-template/internal/base/errors"
-
 	validation "github.com/go-ozzo/ozzo-validation"
 	"github.com/go-ozzo/ozzo-validation/is"
+
+	"go-backend-template/internal/base/crypto"
+	"go-backend-template/internal/base/errors"
 )
 
 type UserModel struct {
