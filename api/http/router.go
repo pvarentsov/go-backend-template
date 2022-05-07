@@ -8,8 +8,8 @@ import (
 	"github.com/gin-gonic/gin"
 
 	"go-backend-template/internal/auth"
-	"go-backend-template/internal/base/contexts"
 	"go-backend-template/internal/base/errors"
+	"go-backend-template/internal/base/request"
 	"go-backend-template/internal/user"
 )
 
@@ -161,11 +161,11 @@ func (r *router) trace() gin.HandlerFunc {
 
 func (r *router) logger() gin.HandlerFunc {
 	return gin.LoggerWithFormatter(func(param gin.LogFormatterParams) string {
-		var parsedReqInfo contexts.ReqInfo
+		var parsedReqInfo request.RequestInfo
 
 		reqInfo, exists := param.Keys[reqInfoKey]
 		if exists {
-			parsedReqInfo = reqInfo.(contexts.ReqInfo)
+			parsedReqInfo = reqInfo.(request.RequestInfo)
 		}
 
 		return fmt.Sprintf("%s - [HTTP] TraceId: %s; UserId: %d; Method: %s; Path: %s; Status: %d, Latency: %s;\n\n",
