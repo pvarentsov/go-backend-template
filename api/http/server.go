@@ -32,8 +32,7 @@ func NewServer(opts ServerOpts) *Server {
 		authService:  opts.AuthService,
 	}
 
-	router := newRouter(server)
-	router.init()
+	initRouter(server)
 
 	return server
 }

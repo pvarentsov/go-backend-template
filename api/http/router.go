@@ -13,14 +13,16 @@ import (
 	"go-backend-template/internal/user"
 )
 
-type router struct {
-	*Server
-}
-
-func newRouter(server *Server) *router {
-	return &router{
+func initRouter(server *Server) {
+	router := &router{
 		Server: server,
 	}
+
+	router.init()
+}
+
+type router struct {
+	*Server
 }
 
 func (r *router) init() {
