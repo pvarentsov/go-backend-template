@@ -6,10 +6,10 @@ import (
 
 	"go-backend-template/api/cli"
 	"go-backend-template/api/http"
-	"go-backend-template/internal/base/crypto"
-	"go-backend-template/internal/base/database"
 
 	authImpl "go-backend-template/internal/auth/impl"
+	cryptoImpl "go-backend-template/internal/base/crypto/impl"
+	databaseImpl "go-backend-template/internal/base/database/impl"
 	userImpl "go-backend-template/internal/user/impl"
 )
 
@@ -22,7 +22,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	dbClient := database.NewClient(ctx, conf.Database())
+	dbClient := databaseImpl.NewClient(ctx, conf.Database())
 
 	err = dbClient.Connect()
 	if err != nil {
@@ -31,8 +31,8 @@ func main() {
 
 	defer dbClient.Close()
 
-	crypto := crypto.NewCrypto()
-	dbService := database.NewService(dbClient)
+	crypto := cryptoImpl.NewCrypto()
+	dbService := databaseImpl.NewService(dbClient)
 
 	userRepositoryOpts := userImpl.UserRepositoryOpts{
 		ConnManager: dbService,

@@ -5,6 +5,7 @@ import (
 
 	"github.com/jackc/pgx/v4/pgxpool"
 
+	"go-backend-template/internal/base/database"
 	"go-backend-template/internal/base/errors"
 )
 
@@ -14,7 +15,7 @@ type Client struct {
 	ctx  context.Context
 }
 
-func NewClient(ctx context.Context, config Config) *Client {
+func NewClient(ctx context.Context, config database.Config) *Client {
 	return &Client{
 		ctx: ctx,
 		url: config.ConnString(),

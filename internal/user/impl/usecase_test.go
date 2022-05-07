@@ -8,9 +8,10 @@ import (
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
 
+	"go-backend-template/internal/user"
+
 	cryptoMock "go-backend-template/internal/base/crypto/mock"
 	dbMock "go-backend-template/internal/base/database/mock"
-	user "go-backend-template/internal/user"
 	userMock "go-backend-template/internal/user/mock"
 )
 

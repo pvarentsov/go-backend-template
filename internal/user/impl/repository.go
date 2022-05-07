@@ -3,15 +3,14 @@ package impl
 import (
 	"context"
 
-	"github.com/doug-martin/goqu/v9"
-
-	"go-backend-template/internal/base/database"
 	"go-backend-template/internal/base/errors"
 	"go-backend-template/internal/user"
+
+	databaseImpl "go-backend-template/internal/base/database/impl"
 )
 
 type UserRepositoryOpts struct {
-	ConnManager database.ConnManager
+	ConnManager databaseImpl.ConnManager
 }
 
 func NewUserRepository(opts UserRepositoryOpts) user.UserRepository {
@@ -21,13 +20,13 @@ func NewUserRepository(opts UserRepositoryOpts) user.UserRepository {
 }
 
 type userRepository struct {
-	database.ConnManager
+	databaseImpl.ConnManager
 }
 
 func (r *userRepository) Add(ctx context.Context, model user.UserModel) (int64, error) {
-	sql, _, err := database.QueryBuilder.
+	sql, _, err := databaseImpl.QueryBuilder.
 		Insert("users").
-		Rows(goqu.Record{
+		Rows(databaseImpl.Record{
 			"firstname": model.FirstName,
 			"lastname":  model.LastName,
 			"email":     model.Email,
@@ -50,15 +49,15 @@ func (r *userRepository) Add(ctx context.Context, model user.UserModel) (int64, 
 }
 
 func (r *userRepository) Update(ctx context.Context, model user.UserModel) (int64, error) {
-	sql, _, err := database.QueryBuilder.
+	sql, _, err := databaseImpl.QueryBuilder.
 		Update("users").
-		Set(goqu.Record{
+		Set(databaseImpl.Record{
 			"firstname": model.FirstName,
 			"lastname":  model.LastName,
 			"email":     model.Email,
 			"password":  model.Password,
 		}).
-		Where(goqu.Ex{"user_id": model.Id}).
+		Where(databaseImpl.Ex{"user_id": model.Id}).
 		Returning("user_id").
 		ToSQL()
 
@@ -76,7 +75,7 @@ func (r *userRepository) Update(ctx context.Context, model user.UserModel) (int6
 }
 
 func (r *userRepository) GetById(ctx context.Context, userId int64) (user.UserModel, error) {
-	sql, _, err := database.QueryBuilder.
+	sql, _, err := databaseImpl.QueryBuilder.
 		Select(
 			"firstname",
 			"lastname",
@@ -84,7 +83,7 @@ func (r *userRepository) GetById(ctx context.Context, userId int64) (user.UserMo
 			"password",
 		).
 		From("users").
-		Where(goqu.Ex{"user_id": userId}).
+		Where(databaseImpl.Ex{"user_id": userId}).
 		ToSQL()
 
 	if err != nil {
@@ -109,7 +108,7 @@ func (r *userRepository) GetById(ctx context.Context, userId int64) (user.UserMo
 }
 
 func (r *userRepository) GetByEmail(ctx context.Context, email string) (user.UserModel, error) {
-	sql, _, err := database.QueryBuilder.
+	sql, _, err := databaseImpl.QueryBuilder.
 		Select(
 			"user_id",
 			"firstname",
@@ -117,7 +116,7 @@ func (r *userRepository) GetByEmail(ctx context.Context, email string) (user.Use
 			"password",
 		).
 		From("users").
-		Where(goqu.Ex{"email": email}).
+		Where(databaseImpl.Ex{"email": email}).
 		ToSQL()
 
 	if err != nil {
