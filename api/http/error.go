@@ -16,20 +16,28 @@ func parseError(err error) (status int, message, details string) {
 		baseErr = errors.Wrap(err, errors.InternalError, "")
 	}
 
-	switch baseErr.Status() {
+	status = convertErrorStatusToHTTP(baseErr.Status())
+	message = baseErr.Error()
+	details = baseErr.DetailedError()
+
+	return
+}
+
+func convertErrorStatusToHTTP(status errors.Status) int {
+	switch status {
 	case errors.BadRequestError:
-		return http.StatusBadRequest, baseErr.Error(), baseErr.DetailedError()
+		return http.StatusBadRequest
 	case errors.ValidationError:
-		return http.StatusBadRequest, baseErr.Error(), baseErr.DetailedError()
+		return http.StatusBadRequest
 	case errors.UnauthorizedError:
-		return http.StatusUnauthorized, baseErr.Error(), baseErr.DetailedError()
+		return http.StatusUnauthorized
 	case errors.WrongCredentialsError:
-		return http.StatusUnauthorized, baseErr.Error(), baseErr.DetailedError()
+		return http.StatusUnauthorized
 	case errors.NotFoundError:
-		return http.StatusNotFound, baseErr.Error(), baseErr.DetailedError()
+		return http.StatusNotFound
 	case errors.AlreadyExistsError:
-		return http.StatusConflict, baseErr.Error(), baseErr.DetailedError()
+		return http.StatusConflict
 	default:
-		return http.StatusInternalServerError, baseErr.Error(), baseErr.DetailedError()
+		return http.StatusInternalServerError
 	}
 }
