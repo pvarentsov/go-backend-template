@@ -5,25 +5,32 @@ import "fmt"
 type Error struct {
 	status  Status
 	message string
-	details string
+	err     error
 }
 
-func (e Error) Error() string {
+func (e *Error) Error() string {
 	return e.message
 }
 
-func (e Error) ErrorWithDetails() string {
-	if e.details != "" {
-		return fmt.Sprintf("%s: %s", e.message, e.details)
+func (e *Error) DetailedError() string {
+	if e.err != nil {
+		if baseErr, ok := e.err.(*Error); ok {
+			return fmt.Sprintf("%s: %s", e.message, baseErr.DetailedError())
+		}
+		return fmt.Sprintf("%s: %s", e.message, e.err.Error())
 	}
 	return e.message
 }
 
-func (e Error) Status() Status {
+func (e *Error) Status() Status {
 	return e.status
 }
 
-func New(status Status, message string) Error {
+func (e *Error) Unwrap() error {
+	return e.err
+}
+
+func New(status Status, message string) *Error {
 	err := Error{
 		status:  status,
 		message: message,
@@ -32,26 +39,10 @@ func New(status Status, message string) Error {
 		err.message = status.Message()
 	}
 
-	return err
+	return &err
 }
 
-func Wrap(err error, status Status, message string) Error {
-	newErr := Error{
-		status:  status,
-		message: message,
-		details: err.Error(),
-	}
-	if baseErr, ok := err.(Error); ok {
-		newErr.details = baseErr.ErrorWithDetails()
-	}
-	if len(message) == 0 {
-		newErr.message = status.Message()
-	}
-
-	return newErr
-}
-
-func Errorf(status Status, message string, a ...interface{}) Error {
+func Errorf(status Status, message string, a ...interface{}) *Error {
 	err := Error{
 		status:  status,
 		message: fmt.Sprintf(message, a...),
@@ -60,21 +51,31 @@ func Errorf(status Status, message string, a ...interface{}) Error {
 		err.message = status.Message()
 	}
 
-	return err
+	return &err
 }
 
-func Wrapf(err error, status Status, message string, a ...interface{}) Error {
+func Wrap(err error, status Status, message string) *Error {
 	newErr := Error{
 		status:  status,
-		message: fmt.Sprintf(message, a...),
-		details: err.Error(),
+		message: message,
+		err:     err,
 	}
 	if len(message) == 0 {
 		newErr.message = status.Message()
 	}
-	if baseErr, ok := err.(Error); ok {
-		newErr.details = baseErr.ErrorWithDetails()
+
+	return &newErr
+}
+
+func Wrapf(err error, status Status, message string, a ...interface{}) *Error {
+	newErr := Error{
+		status:  status,
+		message: fmt.Sprintf(message, a...),
+		err:     err,
+	}
+	if len(message) == 0 {
+		newErr.message = status.Message()
 	}
 
-	return newErr
+	return &newErr
 }

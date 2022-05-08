@@ -15,8 +15,9 @@ import (
 // Config
 
 type Config struct {
-	HttpHost string `envconfig:"HTTP_HOST"`
-	HttpPort int    `envconfig:"HTTP_PORT"`
+	HttpHost          string `envconfig:"HTTP_HOST"`
+	HttpPort          int    `envconfig:"HTTP_PORT"`
+	HttpDetailedError bool   `envconfig:"HTTP_DETAILED_ERROR"`
 
 	DatabaseURL string `envconfig:"DATABASE_URL"`
 
@@ -42,8 +43,9 @@ func ParseEnv(envPath string) (*Config, error) {
 
 func (c *Config) HTTP() http.Config {
 	return &httpConfig{
-		host: c.HttpHost,
-		port: c.HttpPort,
+		host:          c.HttpHost,
+		port:          c.HttpPort,
+		detailedError: c.HttpDetailedError,
 	}
 }
 
@@ -63,12 +65,17 @@ func (c *Config) Auth() auth.Config {
 // HTTP
 
 type httpConfig struct {
-	host string
-	port int
+	host          string
+	port          int
+	detailedError bool
 }
 
 func (c *httpConfig) Address() string {
 	return fmt.Sprintf("%s:%d", c.host, c.port)
+}
+
+func (c *httpConfig) DetailedError() bool {
+	return c.detailedError
 }
 
 // Database

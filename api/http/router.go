@@ -44,13 +44,13 @@ func (r *router) login(c *gin.Context) {
 	var loginUserDto auth.LoginUserDto
 
 	if err := bindBody(&loginUserDto, c); err != nil {
-		errorResponse(err, nil).reply(c)
+		errorResponse(err, nil, r.config.DetailedError()).reply(c)
 		return
 	}
 
 	user, err := r.authService.Login(c, loginUserDto)
 	if err != nil {
-		errorResponse(err, nil).reply(c)
+		errorResponse(err, nil, r.config.DetailedError()).reply(c)
 		return
 	}
 
@@ -62,7 +62,7 @@ func (r *router) authenticate(c *gin.Context) {
 
 	userId, err := r.authService.VerifyAccessToken(token)
 	if err != nil {
-		response := errorResponse(err, nil)
+		response := errorResponse(err, nil, r.config.DetailedError())
 		c.AbortWithStatusJSON(response.Status, response)
 	}
 
@@ -73,13 +73,13 @@ func (r *router) addUser(c *gin.Context) {
 	var addUserDto user.AddUserDto
 
 	if err := bindBody(&addUserDto, c); err != nil {
-		errorResponse(err, nil).reply(c)
+		errorResponse(err, nil, r.config.DetailedError()).reply(c)
 		return
 	}
 
 	user, err := r.userUsecases.Add(contextWithReqInfo(c), addUserDto)
 	if err != nil {
-		errorResponse(err, nil).reply(c)
+		errorResponse(err, nil, r.config.DetailedError()).reply(c)
 		return
 	}
 
@@ -93,13 +93,13 @@ func (r *router) updateMe(c *gin.Context) {
 	updateUserDto.Id = reqInfo.UserId
 
 	if err := bindBody(&updateUserDto, c); err != nil {
-		errorResponse(err, nil).reply(c)
+		errorResponse(err, nil, r.config.DetailedError()).reply(c)
 		return
 	}
 
 	err := r.userUsecases.Update(contextWithReqInfo(c), updateUserDto)
 	if err != nil {
-		errorResponse(err, nil).reply(c)
+		errorResponse(err, nil, r.config.DetailedError()).reply(c)
 		return
 	}
 
@@ -113,13 +113,13 @@ func (r *router) changeMyPassword(c *gin.Context) {
 	changeUserPasswordDto.Id = reqInfo.UserId
 
 	if err := bindBody(&changeUserPasswordDto, c); err != nil {
-		errorResponse(err, nil).reply(c)
+		errorResponse(err, nil, r.config.DetailedError()).reply(c)
 		return
 	}
 
 	err := r.userUsecases.ChangePassword(contextWithReqInfo(c), changeUserPasswordDto)
 	if err != nil {
-		errorResponse(err, nil).reply(c)
+		errorResponse(err, nil, r.config.DetailedError()).reply(c)
 		return
 	}
 
@@ -131,7 +131,7 @@ func (r *router) getMe(c *gin.Context) {
 
 	user, err := r.userUsecases.GetById(contextWithReqInfo(c), reqInfo.UserId)
 	if err != nil {
-		errorResponse(err, nil).reply(c)
+		errorResponse(err, nil, r.config.DetailedError()).reply(c)
 		return
 	}
 
@@ -140,7 +140,7 @@ func (r *router) getMe(c *gin.Context) {
 
 func (r *router) methodNotFound(c *gin.Context) {
 	err := errors.New(errors.NotFoundError, "method not found")
-	errorResponse(err, nil).reply(c)
+	errorResponse(err, nil, r.config.DetailedError()).reply(c)
 }
 
 func (r *router) recover() gin.HandlerFunc {
@@ -216,9 +216,12 @@ func internalErrorResponse(data interface{}) *response {
 	}
 }
 
-func errorResponse(err error, data interface{}) *response {
-	status, message := parseError(err)
+func errorResponse(err error, data interface{}, withDetails bool) *response {
+	status, message, details := parseError(err)
 
+	if withDetails && details != "" {
+		message = details
+	}
 	return &response{
 		Status:  status,
 		Message: message,

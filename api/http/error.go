@@ -6,36 +6,30 @@ import (
 	"go-backend-template/internal/base/errors"
 )
 
-func parseError(err error) (int, string) {
-	withDetails := false
+func parseError(err error) (status int, message, details string) {
+	var baseErr *errors.Error
 
-	getMessage := func(baseErr errors.Error) string {
-		if withDetails {
-			return baseErr.ErrorWithDetails()
-		}
-		return baseErr.Error()
+	if castErr, ok := err.(*errors.Error); ok {
+		baseErr = castErr
+	}
+	if baseErr == nil {
+		baseErr = errors.Wrap(err, errors.InternalError, "")
 	}
 
-	if baseErr, ok := err.(errors.Error); ok {
-		switch baseErr.Status() {
-		case errors.BadRequestError:
-			return http.StatusBadRequest, getMessage(baseErr)
-		case errors.ValidationError:
-			return http.StatusBadRequest, getMessage(baseErr)
-		case errors.UnauthorizedError:
-			return http.StatusUnauthorized, getMessage(baseErr)
-		case errors.WrongCredentialsError:
-			return http.StatusUnauthorized, getMessage(baseErr)
-		case errors.NotFoundError:
-			return http.StatusNotFound, getMessage(baseErr)
-		case errors.AlreadyExistsError:
-			return http.StatusConflict, getMessage(baseErr)
-		default:
-			return http.StatusInternalServerError, getMessage(baseErr)
-		}
+	switch baseErr.Status() {
+	case errors.BadRequestError:
+		return http.StatusBadRequest, baseErr.Error(), baseErr.DetailedError()
+	case errors.ValidationError:
+		return http.StatusBadRequest, baseErr.Error(), baseErr.DetailedError()
+	case errors.UnauthorizedError:
+		return http.StatusUnauthorized, baseErr.Error(), baseErr.DetailedError()
+	case errors.WrongCredentialsError:
+		return http.StatusUnauthorized, baseErr.Error(), baseErr.DetailedError()
+	case errors.NotFoundError:
+		return http.StatusNotFound, baseErr.Error(), baseErr.DetailedError()
+	case errors.AlreadyExistsError:
+		return http.StatusConflict, baseErr.Error(), baseErr.DetailedError()
+	default:
+		return http.StatusInternalServerError, baseErr.Error(), baseErr.DetailedError()
 	}
-
-	baseErr := errors.Wrap(err, errors.InternalError, "")
-
-	return http.StatusInternalServerError, getMessage(baseErr)
 }

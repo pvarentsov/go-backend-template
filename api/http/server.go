@@ -11,6 +11,7 @@ import (
 )
 
 type Config interface {
+	DetailedError() bool
 	Address() string
 }
 
