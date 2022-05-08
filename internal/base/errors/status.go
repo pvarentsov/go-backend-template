@@ -32,6 +32,6 @@ func (s Status) Message() string {
 	case UnauthorizedError:
 		return "unauthorized error"
 	default:
-		return "internal error error"
+		return "internal error"
 	}
 }

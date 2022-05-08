@@ -39,7 +39,7 @@ func (r *userRepository) Add(ctx context.Context, model user.UserModel) (int64, 
 		ToSQL()
 
 	if err != nil {
-		return 0, errors.Wrap(errors.DatabaseError, err, "syntax error")
+		return 0, errors.Wrap(err, errors.DatabaseError, "syntax error")
 	}
 
 	row := r.Conn(ctx).QueryRow(ctx, sql)
@@ -65,7 +65,7 @@ func (r *userRepository) Update(ctx context.Context, model user.UserModel) (int6
 		ToSQL()
 
 	if err != nil {
-		return 0, errors.Wrap(errors.DatabaseError, err, "syntax error")
+		return 0, errors.Wrap(err, errors.DatabaseError, "syntax error")
 	}
 
 	row := r.Conn(ctx).QueryRow(ctx, sql)
@@ -90,7 +90,7 @@ func (r *userRepository) GetById(ctx context.Context, userId int64) (user.UserMo
 		ToSQL()
 
 	if err != nil {
-		return user.UserModel{}, errors.Wrap(errors.DatabaseError, err, "syntax error")
+		return user.UserModel{}, errors.Wrap(err, errors.DatabaseError, "syntax error")
 	}
 
 	row := r.Conn(ctx).QueryRow(ctx, sql)
@@ -123,7 +123,7 @@ func (r *userRepository) GetByEmail(ctx context.Context, email string) (user.Use
 		ToSQL()
 
 	if err != nil {
-		return user.UserModel{}, errors.Wrap(errors.DatabaseError, err, "syntax error")
+		return user.UserModel{}, errors.Wrap(err, errors.DatabaseError, "syntax error")
 	}
 
 	row := r.Conn(ctx).QueryRow(ctx, sql)
@@ -149,47 +149,47 @@ func parseAddUserError(user *user.UserModel, err error) error {
 	if isPgError && pgError.Code == pgerrcode.UniqueViolation {
 		switch pgError.ConstraintName {
 		case "users_email_key":
-			return errors.Wrapf(errors.AlreadyExistsError, err, "user with email \"%s\" already exists", user.Email)
+			return errors.Wrapf(err, errors.AlreadyExistsError, "user with email \"%s\" already exists", user.Email)
 		default:
-			return errors.Wrap(errors.DatabaseError, err, "add user failed")
+			return errors.Wrapf(err, errors.DatabaseError, "add user failed")
 		}
 	}
 
-	return errors.Wrap(errors.DatabaseError, err, "add user failed")
+	return errors.Wrapf(err, errors.DatabaseError, "add user failed")
 }
 
 func parseUpdateUserError(user *user.UserModel, err error) error {
 	pgError, isPgError := err.(*pgconn.PgError)
 
 	if isPgError && pgError.Code == pgerrcode.UniqueViolation {
-		return errors.Wrapf(errors.AlreadyExistsError, err, "user with email \"%s\" already exists", user.Email)
+		return errors.Wrapf(err, errors.AlreadyExistsError, "user with email \"%s\" already exists", user.Email)
 	}
 
-	return errors.Wrap(errors.DatabaseError, err, "update user failed")
+	return errors.Wrapf(err, errors.DatabaseError, "update user failed")
 }
 
 func parseGetUserByIdError(userId int64, err error) error {
 	pgError, isPgError := err.(*pgconn.PgError)
 
 	if isPgError && pgError.Code == pgerrcode.NoDataFound {
-		return errors.Wrapf(errors.NotFoundError, err, "user with id \"%d\" not found", userId)
+		return errors.Wrapf(err, errors.NotFoundError, "user with id \"%d\" not found", userId)
 	}
 	if err.Error() == "no rows in result set" {
-		return errors.Wrapf(errors.NotFoundError, err, "user with id \"%d\" not found", userId)
+		return errors.Wrapf(err, errors.NotFoundError, "user with id \"%d\" not found", userId)
 	}
 
-	return errors.Wrap(errors.DatabaseError, err, "get user by id failed")
+	return errors.Wrap(err, errors.DatabaseError, "get user by id failed")
 }
 
 func parseGetUserByEmailError(email string, err error) error {
 	pgError, isPgError := err.(*pgconn.PgError)
 
 	if isPgError && pgError.Code == pgerrcode.NoDataFound {
-		return errors.Wrapf(errors.NotFoundError, err, "user with email \"%s\" not found", email)
+		return errors.Wrapf(err, errors.NotFoundError, "user with email \"%s\" not found", email)
 	}
 	if err.Error() == "no rows in result set" {
-		return errors.Wrapf(errors.NotFoundError, err, "user with email \"%s\" not found", email)
+		return errors.Wrapf(err, errors.NotFoundError, "user with email \"%s\" not found", email)
 	}
 
-	return errors.Wrap(errors.DatabaseError, err, "get user by email failed")
+	return errors.Wrap(err, errors.DatabaseError, "get user by email failed")
 }

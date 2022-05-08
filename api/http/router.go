@@ -145,7 +145,7 @@ func (r *router) methodNotFound(c *gin.Context) {
 
 func (r *router) recover() gin.HandlerFunc {
 	return gin.CustomRecovery(func(c *gin.Context, recovered interface{}) {
-		response := errorResponse(nil, nil)
+		response := internalErrorResponse(nil)
 		c.AbortWithStatusJSON(response.Status, response)
 	})
 }
@@ -202,6 +202,16 @@ func okResponse(data interface{}) *response {
 	return &response{
 		Status:  http.StatusOK,
 		Message: "ok",
+		Data:    data,
+	}
+}
+
+func internalErrorResponse(data interface{}) *response {
+	status, message := http.StatusInternalServerError, "internal error"
+
+	return &response{
+		Status:  status,
+		Message: message,
 		Data:    data,
 	}
 }

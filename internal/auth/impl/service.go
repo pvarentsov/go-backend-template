@@ -32,7 +32,7 @@ type authService struct {
 func (u *authService) Login(ctx context.Context, in auth.LoginUserDto) (out auth.LoggedUserDto, err error) {
 	user, err := u.UserRepository.GetByEmail(ctx, in.Email)
 	if err != nil {
-		return out, errors.Wrap(errors.WrongCredentialsError, err, "")
+		return out, errors.Wrap(err, errors.WrongCredentialsError, "")
 	}
 	if !user.ComparePassword(in.Password, u.Crypto) {
 		return out, errors.New(errors.WrongCredentialsError, "")
