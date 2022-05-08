@@ -12,6 +12,8 @@ $ make
 Usage: make [command]
 
 Commands:
+ rename-project name={name}    Rename project
+ 
  build-http                    Build http server
 
  migration-create name={name}  Create migration
