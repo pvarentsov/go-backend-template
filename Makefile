@@ -1,6 +1,13 @@
 # Constants
 
+PROJECT_NAME = 'go-backend-template'
 DB_URL = 'postgres://go-backend-template:go-backend-template@localhost:5454/go-backend-template?sslmode=disable'
+
+ifeq ($(OS),Windows_NT) 
+    DETECTED_OS := Windows
+else
+    DETECTED_OS := $(shell sh -c 'uname 2>/dev/null || echo Unknown')
+endif
 
 # Help
 
@@ -10,6 +17,8 @@ help:
 	@echo "Usage: make [command]"
 	@echo
 	@echo "Commands:"
+	@echo " rename-project name={name}    Rename project"	
+	@echo	
 	@echo " build-http                    Build http server"
 	@echo
 	@echo " migration-create name={name}  Create migration"
@@ -28,6 +37,24 @@ help:
 	@echo
 
 # Build
+
+.SILENT: rename-project
+rename-project:
+    ifeq ($(name),)
+		@echo 'new project name not set'
+    else
+        ifeq ($(DETECTED_OS),Darwin)
+			@grep -RiIl 'go-backend-template' | xargs sed -i '' 's/$(PROJECT_NAME)/$(name)/g'
+        endif
+
+        ifeq ($(DETECTED_OS),Linux)
+			@grep -RiIl 'go-backend-template' | xargs sed -i 's/$(PROJECT_NAME)/$(name)/g'
+        endif
+
+        ifeq ($(DETECTED_OS),Windows)
+			@grep 'target is not supported on Windows'
+        endif
+    endif
 
 .SILENT: build-http
 build-http:
