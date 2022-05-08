@@ -44,11 +44,11 @@ rename-project:
 		@echo 'new project name not set'
     else
         ifeq ($(DETECTED_OS),Darwin)
-			@grep -RiIl 'go-backend-template' | xargs sed -i '' 's/$(PROJECT_NAME)/$(name)/g'
+			@grep -RiIl '$(PROJECT_NAME)' | xargs sed -i '' 's/$(PROJECT_NAME)/$(name)/g'
         endif
 
         ifeq ($(DETECTED_OS),Linux)
-			@grep -RiIl 'go-backend-template' | xargs sed -i 's/$(PROJECT_NAME)/$(name)/g'
+			@grep -RiIl '$(PROJECT_NAME)' | xargs sed -i 's/$(PROJECT_NAME)/$(name)/g'
         endif
 
         ifeq ($(DETECTED_OS),Windows)
