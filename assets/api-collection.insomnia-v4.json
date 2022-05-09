@@ -41,7 +41,7 @@
       "parentId": null,
       "modified": 1641733103981,
       "created": 1641733103981,
-      "name": "Go Backend Template",
+      "name": "go-backend-template",
       "description": "",
       "scope": "collection",
       "_type": "workspace"
