@@ -52,7 +52,7 @@ rename-project:
         endif
 
         ifeq ($(DETECTED_OS),Windows)
-			@grep 'target is not supported on Windows'
+			@grep 'target is not implemented on Windows platform'
         endif
     endif
 
