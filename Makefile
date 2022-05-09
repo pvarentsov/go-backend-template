@@ -31,10 +31,6 @@ help:
 	@echo " fmt                           Format source code"
 	@echo " test                          Run unit tests"
 	@echo
-	@echo "Requirements:"
-	@echo " docker-compose                Docker Compose CLI: https://docs.docker.com/compose/reference"
-	@echo " migrate                       Migration CLI tool: https://github.com/golang-migrate/migrate"
-	@echo
 
 # Build
 

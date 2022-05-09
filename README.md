@@ -6,6 +6,12 @@
 
 ## Makefile
 
+Makefile requires installed dependecies:
+* [go](https://go.dev/doc/install)
+* [docker-compose](https://docs.docker.com/compose/reference)
+* [migrate](https://github.com/golang-migrate/migrate)
+
+
 ```shell
 $ make
 
@@ -25,10 +31,6 @@ Commands:
 
  fmt                           Format source code
  test                          Run unit tests
-
-Requirements:
- docker-compose                Docker Compose CLI: https://docs.docker.com/compose/reference
- migrate                       Migration CLI tool: https://github.com/golang-migrate/migrate
 
 ```
 
