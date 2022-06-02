@@ -1,5 +1,5 @@
 <h1 align="center">
-    <img height="80" src="./assets/gopher-icon.gif" alt="Go"><br>Backend Template
+    <img height="80" width="80" src="./assets/gopher-icon.gif" alt="Go"><br>Backend Template
 </h1>
 
 > Clean architecture based backend template in Go.
